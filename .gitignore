@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Track these files
+!.gitignore
+!README.md
+!docs/
+!docs/ARCHITECTURE.md
+!notebooks/
+!notebooks/taxonomy_ontology.ipynb
+!pyproject.toml
