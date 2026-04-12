@@ -1,4 +1,4 @@
-# Literary Search and Discovery Engine
+# Agentic RAG 
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Anthropic](https://img.shields.io/badge/Anthropic-191919?logo=anthropic&logoColor=white)
