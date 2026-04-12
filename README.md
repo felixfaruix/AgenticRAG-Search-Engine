@@ -62,22 +62,16 @@ The knowledge graph is built through a two-stage LLM-driven pipeline documented 
 
 ## Memory and Storage
 
-Supermemory serves as the unified storage layer, handling both the knowledge graph and per-agent session memory. We chose it because it natively supports ontology-aware edges, container-scoped storage, and memory graph traversal — which maps directly onto our multi-agent retrieval needs without building a custom graph layer.
+Supermemory serves as the unified storage layer, handling both the knowledge graph and per-agent session memory. It natively supports ontology-aware edges, container-scoped storage, and memory graph traversal — which maps directly onto the multi-agent retrieval needs without building a custom graph layer.
 
-Each book is stored in its own container (`book_frankenstein`, `book_dracula`, etc.) to prevent cross-book entity confusion during traversal. Every validated triple is stored as a memory entry where the content field holds the full source chunk text, not just the triple label — this is critical because bare triples lose ~35% of answer-relevant information.
-
-The system maintains four separate indexes, each serving a different retrieval pattern:
+Different retrieval patterns need different index structures. Keyword search needs clean chunks with undiluted term frequencies. Dense semantic search needs contextually enriched chunks with resolved pronouns. Thematic exploration needs book-level representations. Graph traversal needs typed edges with source text attached. The system maintains four separate indexes to serve these patterns:
 
 | Index | Contents | Used By |
 |---|---|---|
 | Recursive vector index | 512-token chunks, no enrichment | Vector RAG Agent (BM25 keyword search) |
 | Contextual vector index | 512-token chunks with LLM-generated contextual headers | Vector RAG Agent (dense semantic search) |
-| Book-level vector index | ~800-word book summaries embedded via text-embedding-005 | Thematic Agent |
+| Book-level vector index | ~800-word book summaries | Thematic Agent |
 | Supermemory memory graph | Validated triples with source chunks, ontology-aware edges | Graph RAG Agent, Comparative Agent |
-
-The recursive index keeps chunks clean for BM25 — no injected context words that would dilute term frequency signals. The contextual index resolves pronouns and references for dense search. The book-level index enables fast thematic matching at corpus scale. The memory graph supports typed edge traversal for multi-hop relational queries.
-
-Supermemory also manages agent session containers (`agent_graph_rag_{session}`, `agent_vector_rag_{session}`) that store intermediate results, retry history, and synthesis feedback. Agents review their own previous attempts before trying alternative strategies, and the orchestrator passes structured context between agents through these containers.
 
 ## Project Structure
 
