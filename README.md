@@ -9,15 +9,32 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
                |
         Intent Classifier
                |
-          Orchestrator
-          (entity resolution, routing)
+          Orchestrator  ------------ PostgreSQL
+          (entity resolution,        (tool call logging,
+           routing)                   latency, retries)
          /     |      \        \
    Vector    Graph   Thematic  Comparative
     RAG       RAG     Agent      Agent
-     \        |       /          /
-      Synthesis Agent
-      (grounding + citations)
+     |         |       |          |
+     |    Supermemory  |          |
+     |    (KG store,   |          |
+     |     agent mem)  |          |
+      \        |       /          /
+       Synthesis Agent
+       (grounding + citations)
 ```
+
+## Knowledge Graph
+
+The knowledge graph is built through a two-stage LLM-driven pipeline documented in `notebooks/taxonomy_ontology.ipynb`.
+
+**Competency questions.** Following the CQ-by-CQ methodology (Chevignard et al., ESWC 2025), we generate ~200 competency questions that define what the ontology must be able to answer. These questions -- not sample passages -- drive the schema design, avoiding noise injection from raw text.
+
+**Taxonomy.** The LLM produces an entity type hierarchy from the competency questions alone: 8 entity types (Character, Location, Event, Object, Theme, TextualComponent, LiteraryWork, Author) organized to cover factual, relational, temporal, structural, thematic, comparative, and spatial query patterns.
+
+**Ontology.** The schema adds 12 typed relationship types (WROTE, APPEARS_IN, SET_IN, RELATED_TO, PARTICIPATES_IN, PRECEDES, IS_PART_OF, IS_SUBCOMPONENT_OF, OCCURS_IN, MANIFESTS_THEME, USES, TRAVELS_TO) with constrained source/target entity pairs. This follows the principle from Ontogenia that competency questions are sufficient input for schema generation -- additional text samples introduce extraction bias without improving schema coverage.
+
+**Validation.** Schema quality is tested by extracting triples from random 800-word passages across the corpus and measuring per-entity-type hit rates. This acts as a proxy for schema completeness, confirming the type system captures the structural patterns present in the texts.
 
 ## What's in here
 
@@ -26,7 +43,14 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
 
 ## Stack
 
-Gemini 2.5 Pro (Vertex AI) for generation, Instructor + Pydantic for structured output, Supermemory for knowledge graph storage, Vertex AI text-embedding-005 for embeddings, LangGraph for orchestration, PostgreSQL for observability.
+| Component | Technology |
+|---|---|
+| LLM | Gemini 2.5 Pro (Vertex AI, OpenAI-compatible endpoint) |
+| Structured output | Instructor + Pydantic |
+| Knowledge graph | Supermemory (per-book containers, ontology-aware edges) |
+| Embeddings | Vertex AI text-embedding-005 |
+| Orchestration | LangGraph |
+| Observability | PostgreSQL (tool call logging, latency tracking, retry rates) |
 
 ## Corpus
 
