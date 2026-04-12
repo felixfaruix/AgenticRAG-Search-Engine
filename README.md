@@ -1,66 +1,33 @@
 # Literary Search and Discovery Engine
 
-An agentic retrieval system for literary texts. The system accepts natural language queries about a corpus of 9 public-domain books (from Project Gutenberg) and returns grounded, cited answers by routing each query to a specialized retrieval agent.
+A multi-agent retrieval system that answers natural language queries over a corpus of 9 public-domain literary texts. The core idea is that different query types need different retrieval mechanisms -- factual lookups work best with vector search, relational questions need graph traversal, thematic exploration needs book-level summaries. Instead of forcing one approach, an orchestrator classifies the query and routes it to the right agent.
 
-## Motivation
+The ontology schema, extraction pipeline, and evaluation methodology are grounded in recent literature on CQ-driven ontology engineering (Ontogenia, ESWC 2025) and follow current state-of-the-art practices for knowledge graph construction and retrieval-augmented generation.
 
-No single retrieval approach performs best across all query types. Single-hop factual queries are best served by vector search with keyword matching. Multi-hop relational queries require knowledge graph traversal. Thematic and exploratory queries benefit from book-level summaries. This system uses an orchestrator to classify the query, select the appropriate agent, and combine results into a single grounded answer.
+```
+          User Query
+               |
+        Intent Classifier
+               |
+          Orchestrator
+          (entity resolution, routing)
+         /     |      \        \
+   Vector    Graph   Thematic  Comparative
+    RAG       RAG     Agent      Agent
+     \        |       /          /
+      Synthesis Agent
+      (grounding + citations)
+```
 
-## Architecture
+## What's in here
 
-The system routes queries through four specialized agents, each backed by a different retrieval mechanism:
-
-- **Vector RAG Agent** -- single-hop factual queries via BM25 or dense semantic search over chunked text
-- **Graph RAG Agent** -- multi-hop relational queries via knowledge graph traversal (Supermemory)
-- **Thematic Agent** -- broad thematic queries via book-level summary search
-- **Comparative Agent** -- cross-book comparisons via parallel search across book containers
-
-A synthesis agent generates grounded answers with citations and triggers retries when quality thresholds are not met.
-
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full system design.
-
-## Corpus
-
-| Book | Author | Genre |
-|---|---|---|
-| Alice's Adventures in Wonderland | Lewis Carroll | Fantasy |
-| Beowulf | Anonymous | Epic Poetry |
-| The Count of Monte Cristo | Alexandre Dumas | Adventure |
-| Dracula | Bram Stoker | Gothic Horror |
-| Frankenstein | Mary Shelley | Gothic Horror |
-| The Great Gatsby | F. Scott Fitzgerald | Modernist Fiction |
-| Pride and Prejudice | Jane Austen | Comedy of Manners |
-| The Prince | Niccolo Machiavelli | Political Philosophy |
-| The Complete Works of Shakespeare | William Shakespeare | Drama |
-
-## Pipeline
-
-1. **Ontology design** (`notebooks/taxonomy_ontology.ipynb`) -- LLM-generated competency questions drive taxonomy and ontology schema creation, validated against the corpus
-2. **Entity extraction** -- schema-constrained triple extraction from chunked text
-3. **Entity resolution** -- alias generation and RapidFuzz matching for canonical node merging
-4. **Ingestion** -- parallel construction of vector indexes and knowledge graph in Supermemory
-5. **Evaluation** -- synthetic query dataset with per-agent metrics and ablation comparisons
+- **`docs/ARCHITECTURE.md`** -- full system design: agent specifications, storage layout, ingestion pipeline, disambiguation logic, evaluation protocol, and multi-model routing strategy
+- **`notebooks/taxonomy_ontology.ipynb`** -- ontology pipeline: corpus loading, LLM-based chapter detection, competency question generation, taxonomy and schema construction, schema validation, extraction testing, and book summary embeddings
 
 ## Stack
 
-- **LLM**: Gemini 2.5 Pro via Vertex AI (OpenAI-compatible endpoint)
-- **Structured output**: Instructor with Pydantic models
-- **Knowledge graph**: Supermemory
-- **Embeddings**: Vertex AI text-embedding-005
-- **Observability**: PostgreSQL tool call logging
-- **Orchestration**: LangGraph
+Gemini 2.5 Pro (Vertex AI) for generation, Instructor + Pydantic for structured output, Supermemory for knowledge graph storage, Vertex AI text-embedding-005 for embeddings, LangGraph for orchestration, PostgreSQL for observability.
 
-## Setup
+## Corpus
 
-```bash
-# Clone and install dependencies
-git clone https://github.com/felixfaruix/literary-search-engine.git
-cd literary-search-engine
-uv sync
-
-# Set environment variables
-cp .env.example .env
-# Fill in GCP_PROJECT, GCP_LOCATION, GOOGLE_APPLICATION_CREDENTIALS, DATABASE_URL
-```
-
-Requires Python 3.12+ and a GCP project with Vertex AI enabled.
+9 Gutenberg books: Alice in Wonderland, Beowulf, The Count of Monte Cristo, Dracula, Frankenstein, The Great Gatsby, Pride and Prejudice, The Prince, The Complete Works of Shakespeare.
