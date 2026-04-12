@@ -36,7 +36,7 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
 
 ## Entity Taxonomy and Ontology - Knowledge Graph
 
-![Ontology Schema](docs/images/relationships.png)
+<img src="docs/images/relationships.png" alt="Ontology Schema" width="600">
 
 The knowledge graph is built through a two-stage LLM-driven pipeline documented in `notebooks/taxonomy_ontology.ipynb`.
 
