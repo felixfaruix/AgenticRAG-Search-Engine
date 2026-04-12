@@ -36,6 +36,8 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
 
 ## Knowledge Graph
 
+![Ontology Schema](docs/images/relationships.png)
+
 The knowledge graph is built through a two-stage LLM-driven pipeline documented in `notebooks/taxonomy_ontology.ipynb`.
 
 **Competency questions.** Following the CQ-by-CQ methodology (Chevignard et al., ESWC 2025), we generate ~200 competency questions that define what the ontology must be able to answer. These questions — not sample passages — drive the schema design, avoiding noise injection from raw text.

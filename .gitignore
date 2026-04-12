@@ -6,6 +6,8 @@
 !README.md
 !docs/
 !docs/ARCHITECTURE.md
+!docs/images/
+!docs/images/*
 !notebooks/
 !notebooks/taxonomy_ontology.ipynb
 !pyproject.toml
