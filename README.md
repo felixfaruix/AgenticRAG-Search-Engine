@@ -22,9 +22,9 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
                |
         Intent Classifier
                |
-          Orchestrator  ------------ PostgreSQL
-          (entity resolution,        (tool call logging,
-           routing)                   latency, retries)
+          Orchestrator  ----------------  PostgreSQL
+       (entity resolution,            (tool call logging,
+            routing)                    latency, retries)
          /     |      \        \
    Vector    Graph   Thematic  Comparative
     RAG       RAG     Agent      Agent
@@ -33,8 +33,8 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
      |    (KG store,   |          |
      |     agent mem)  |          |
       \        |       /          /
-       Synthesis Agent
-       (grounding + citations)
+       Synthesis Agent           /
+       (grounding + citations)  /
 ```
 
 ## Agents
