@@ -34,6 +34,16 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
        (grounding + citations)
 ```
 
+## Agents
+
+Each agent handles a different retrieval pattern. They share the same orchestrator and entity resolution layer but differ in how they find and return relevant passages.
+
+- **Vector RAG Agent**: single-hop factual queries. Switches between BM25 keyword search (high entity specificity) and dense semantic search (fuzzy recall) over chunked text indexes. Uses reciprocal rank fusion when the sub-classification is uncertain.
+- **Graph RAG Agent**: multi-hop relational and temporal queries. Traverses typed edges in the knowledge graph, collecting source text attached to each node. For temporal queries, restricts traversal to PRECEDES edges and returns ordered event chains.
+- **Thematic Agent**: broad thematic and exploratory queries. Searches over book-level summary embeddings, then runs a convergence loop that narrows recommendations by asking discriminative preference questions.
+- **Comparative Agent**: cross-book comparisons. Runs parallel search across multiple book containers using both graph traversal and vector search, then aligns results along the comparison dimension extracted from the query.
+- **Synthesis Agent**: not a retrieval agent. Takes passages from all active agents, generates a grounded answer with citations, and runs a verification check. On failure, it writes structured feedback back to the originating agent for retry (max 2 retries).
+
 ## Entity Taxonomy and Ontology - Knowledge Graph
 
 <p align="center">
@@ -49,16 +59,6 @@ The knowledge graph is built through a two-stage LLM-driven pipeline documented 
 **Ontology.** The schema adds 12 typed relationship types (WROTE, APPEARS_IN, SET_IN, RELATED_TO, PARTICIPATES_IN, PRECEDES, IS_PART_OF, IS_SUBCOMPONENT_OF, OCCURS_IN, MANIFESTS_THEME, USES, TRAVELS_TO) with constrained source/target entity pairs. This follows the principle from Ontogenia that competency questions are sufficient input for schema generation: additional text samples introduce extraction bias without improving schema coverage.
 
 **Validation.** Schema quality is tested by extracting triples from random 800-word passages across the corpus and measuring per-entity-type hit rates. This acts as a proxy for schema completeness, confirming the type system captures the structural patterns present in the texts.
-
-## Agents
-
-Each agent handles a different retrieval pattern. They share the same orchestrator and entity resolution layer but differ in how they find and return relevant passages.
-
-- **Vector RAG Agent**: single-hop factual queries. Switches between BM25 keyword search (high entity specificity) and dense semantic search (fuzzy recall) over chunked text indexes. Uses reciprocal rank fusion when the sub-classification is uncertain.
-- **Graph RAG Agent**: multi-hop relational and temporal queries. Traverses typed edges in the knowledge graph, collecting source text attached to each node. For temporal queries, restricts traversal to PRECEDES edges and returns ordered event chains.
-- **Thematic Agent**: broad thematic and exploratory queries. Searches over book-level summary embeddings, then runs a convergence loop that narrows recommendations by asking discriminative preference questions.
-- **Comparative Agent**: cross-book comparisons. Runs parallel search across multiple book containers using both graph traversal and vector search, then aligns results along the comparison dimension extracted from the query.
-- **Synthesis Agent**: not a retrieval agent. Takes passages from all active agents, generates a grounded answer with citations, and runs a verification check. On failure, it writes structured feedback back to the originating agent for retry (max 2 retries).
 
 ## Project Structure
 
