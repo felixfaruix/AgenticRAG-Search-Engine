@@ -10,4 +10,9 @@
 !docs/images/*
 !notebooks/
 !notebooks/taxonomy_ontology.ipynb
+!notebooks/extraction.ipynb
+!src/
+!src/__init__.py
+!src/models.py
 !pyproject.toml
+!uv.lock
