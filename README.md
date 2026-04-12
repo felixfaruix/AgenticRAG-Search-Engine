@@ -34,7 +34,7 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
        (grounding + citations)
 ```
 
-## Knowledge Graph
+## Entity Taxonomy and Ontology - Knowledge Graph
 
 ![Ontology Schema](docs/images/relationships.png)
 
