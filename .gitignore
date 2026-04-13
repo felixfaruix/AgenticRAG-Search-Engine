@@ -11,8 +11,11 @@
 !notebooks/
 !notebooks/taxonomy_ontology.ipynb
 !notebooks/extraction.ipynb
-!src/
-!src/__init__.py
-!src/models.py
 !pyproject.toml
 !uv.lock
+!src/
+!src/**
+
+# Re-ignore generated files inside tracked dirs
+__pycache__/
+
