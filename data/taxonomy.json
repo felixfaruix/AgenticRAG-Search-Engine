@@ -1,0 +1,101 @@
+{
+  "entity_types": [
+    {
+      "name": "LiteraryWork",
+      "description": "A distinct creative work of literature, such as a book, play, or epic poem.",
+      "examples": [
+        "Dracula",
+        "Frankenstein",
+        "The Great Gatsby",
+        "Beowulf",
+        "The Prince"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Author",
+      "description": "The real-world person who wrote or created a literary work.",
+      "examples": [
+        "Bram Stoker",
+        "Machiavelli",
+        "Shakespeare",
+        "Mary Shelley",
+        "Jane Austen"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Character",
+      "description": "A fictional person, creature, or entity that participates in the narrative of a literary work.",
+      "examples": [
+        "Elizabeth Bennet",
+        "Victor Frankenstein",
+        "Count Dracula",
+        "Jay Gatsby",
+        "Beowulf"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Location",
+      "description": "A specific geographical place, building, region, or setting where events in a literary work occur.",
+      "examples": [
+        "Castle Dracula",
+        "Pemberley",
+        "Heorot",
+        "Château d'If",
+        "West Egg"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Object",
+      "description": "A significant, tangible item within a literary work's narrative, such as a weapon, vehicle, or treasure.",
+      "examples": [
+        "Hrunting",
+        "The Demeter",
+        "Treasure of Spada",
+        "Dracula's boxes of earth",
+        "the green light"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Event",
+      "description": "A specific plot point, action, or occurrence that takes place within the timeline of a literary work.",
+      "examples": [
+        "murder of William Frankenstein",
+        "Myrtle Wilson's death",
+        "Beowulf's battle against Grendel",
+        "Lydia's elopement with Wickham",
+        "the Mad Hatter's tea party"
+      ],
+      "parent": null
+    },
+    {
+      "name": "TextualComponent",
+      "description": "A structural division or part of a literary work's text, such as a chapter, act, scene, or volume.",
+      "examples": [
+        "Act I of 'Romeo and Juliet'",
+        "Chapter 1 of 'The Great Gatsby'",
+        "Volume II of 'Pride and Prejudice'",
+        "the 'To be, or not to be' soliloquy",
+        "the last chapter of 'Dracula'"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Theme",
+      "description": "An abstract concept, recurring idea, or central topic that is explored within a literary work.",
+      "examples": [
+        "revenge",
+        "ambition",
+        "social class",
+        "the American Dream",
+        "good versus evil"
+      ],
+      "parent": null
+    }
+  ],
+  "reasoning": "The taxonomy is designed to directly model the core entities required to answer the competency questions. A flat, non-hierarchical structure with eight distinct types was chosen to maximize clarity and simplify the entity extraction task. 'LiteraryWork' serves as the central entity. 'Author' and 'Character' are separated to distinguish real-world creators from fictional beings. 'Location', 'Object', and 'Event' capture the concrete 'where', 'what', and 'when' of the narrative plot, which is crucial for answering questions about setting, items, and chronology. 'TextualComponent' is included to handle queries about the physical structure of the texts (chapters, acts, scenes). Finally, 'Theme' supports abstract, analytical questions about the concepts and ideas within the works. This set of types provides comprehensive coverage for factual, structural, and thematic analysis of the literary corpus."
+}

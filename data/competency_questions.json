@@ -1,0 +1,1598 @@
+[
+  {
+    "id": "CQ001",
+    "category": "Factual",
+    "question": "Who is the author of Dracula?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ002",
+    "category": "Factual",
+    "question": "What is the full title of the book Frankenstein?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ003",
+    "category": "Factual",
+    "question": "In which year was The Great Gatsby first published?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ004",
+    "category": "Factual",
+    "question": "What is the primary genre of Pride and Prejudice?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ005",
+    "category": "Factual",
+    "question": "Who is the main protagonist of Beowulf?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ006",
+    "category": "Factual",
+    "question": "What is the name of the monster created by Victor Frankenstein?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ007",
+    "category": "Factual",
+    "question": "Where is the primary setting of The Great Gatsby?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ008",
+    "category": "Factual",
+    "question": "Who is the king of the Danes in Beowulf?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ009",
+    "category": "Factual",
+    "question": "What is the name of the estate owned by Mr. Darcy in Pride and Prejudice?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ010",
+    "category": "Factual",
+    "question": "In which country is Castle Dracula located?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ011",
+    "category": "Factual",
+    "question": "What is the name of the treasure Abbé Faria tells Edmond Dantès about in The Count of Monte Cristo?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ012",
+    "category": "Factual",
+    "question": "Who are the five Bennet sisters in Pride and Prejudice?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ013",
+    "category": "Factual",
+    "question": "What character does Alice follow down the rabbit-hole in Alice's Adventures in Wonderland?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ014",
+    "category": "Factual",
+    "question": "In The Prince, what are the main types of principalities Machiavelli discusses?",
+    "example_books": [
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ015",
+    "category": "Factual",
+    "question": "What is the name of the sword Beowulf uses to fight Grendel's Mother?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ016",
+    "category": "Factual",
+    "question": "Which character in Dracula is a solicitor from Exeter?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ017",
+    "category": "Factual",
+    "question": "What is the name of the island prison where Edmond Dantès is held in The Count of Monte Cristo?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ018",
+    "category": "Factual",
+    "question": "Who is the narrator of The Great Gatsby?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ019",
+    "category": "Factual",
+    "question": "What is the subtitle of Frankenstein?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ020",
+    "category": "Factual",
+    "question": "Which historical figures are mentioned by Machiavelli in The Prince?",
+    "example_books": [
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ021",
+    "category": "Factual",
+    "question": "What is the name of the mead-hall in Beowulf?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ022",
+    "category": "Factual",
+    "question": "In Dracula, what is the name of the ship that brings Dracula to Whitby?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ023",
+    "category": "Factual",
+    "question": "Who is Catherine de Bourgh's daughter in Pride and Prejudice?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ024",
+    "category": "Factual",
+    "question": "In Frankenstein, where does Victor Frankenstein go to university?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ025",
+    "category": "Factual",
+    "question": "What is the name of Hamlet's mother in Shakespeare's Hamlet?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ026",
+    "category": "Factual",
+    "question": "In The Count of Monte Cristo, who is the primary antagonist that arranged for Dantès's imprisonment?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ027",
+    "category": "Factual",
+    "question": "What are the names of the three weird sisters in Shakespeare's Macbeth?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ028",
+    "category": "Factual",
+    "question": "In Alice's Adventures in Wonderland, who presides over the nonsensical trial at the end?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ029",
+    "category": "Relational",
+    "question": "What is the family relationship between Elizabeth Bennet and Jane Bennet in 'Pride and Prejudice'?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ030",
+    "category": "Relational",
+    "question": "What is the nature of the relationship between Victor Frankenstein and his creation in 'Frankenstein'?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ031",
+    "category": "Relational",
+    "question": "Which characters in 'Dracula' form a group with Van Helsing to hunt the Count?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ032",
+    "category": "Relational",
+    "question": "Upon whom does Edmond Dantès enact his revenge in 'The Count of Monte Cristo'?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ033",
+    "category": "Relational",
+    "question": "Which characters attended the ball at Netherfield in 'Pride and Prejudice'?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ034",
+    "category": "Relational",
+    "question": "Who is the primary romantic interest of Jay Gatsby in 'The Great Gatsby'?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ035",
+    "category": "Relational",
+    "question": "Who served as a mentor to Edmond Dantès during his time in the Château d'If?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ036",
+    "category": "Relational",
+    "question": "Which characters in 'Hamlet' interact with the ghost of Hamlet's father?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ037",
+    "category": "Relational",
+    "question": "Who are the allies of Beowulf in his fight against the monster Grendel?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ038",
+    "category": "Relational",
+    "question": "What is the relationship between Mercédès and Fernand Mondego after Edmond Dantès's imprisonment?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ039",
+    "category": "Relational",
+    "question": "Which characters does Alice meet at the Mad Hatter's tea party in 'Alice's Adventures in Wonderland'?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ040",
+    "category": "Relational",
+    "question": "Who receives letters from Jonathan Harker while he is imprisoned in Castle Dracula?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ041",
+    "category": "Relational",
+    "question": "Which characters are involved in the final, fatal events concerning Romeo and Juliet?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ042",
+    "category": "Relational",
+    "question": "Who does the creature in 'Frankenstein' consider to be his creator?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ043",
+    "category": "Relational",
+    "question": "How are Nick Carraway and Daisy Buchanan related in 'The Great Gatsby'?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ044",
+    "category": "Relational",
+    "question": "Which characters does Mr. Darcy propose marriage to in 'Pride and Prejudice'?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ045",
+    "category": "Relational",
+    "question": "Which monstrous figures does Beowulf fight against?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ046",
+    "category": "Relational",
+    "question": "Who conspires with Iago against Othello?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ047",
+    "category": "Relational",
+    "question": "Which characters does Count Dracula transform into vampires?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ048",
+    "category": "Relational",
+    "question": "Who are the friends of Victor Frankenstein that are killed by his creation?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ049",
+    "category": "Relational",
+    "question": "Which named characters attend Jay Gatsby's parties?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ050",
+    "category": "Relational",
+    "question": "Which characters are members of the Montague family in 'Romeo and Juliet'?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ051",
+    "category": "Relational",
+    "question": "What is the relationship between King Hrothgar and Beowulf?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ052",
+    "category": "Relational",
+    "question": "Who does the Queen of Hearts order to be executed during the croquet game?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ053",
+    "category": "Relational",
+    "question": "Which historical rulers' actions does Machiavelli use as examples in 'The Prince'?",
+    "example_books": [
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ054",
+    "category": "Relational",
+    "question": "Who witnesses the final confrontation between Edmond Dantès and Fernand Mondego?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ055",
+    "category": "Relational",
+    "question": "Who tells Nick Carraway the story of Gatsby's past with Daisy?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ056",
+    "category": "Relational",
+    "question": "Who are the victims of Dracula's attacks in London?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ057",
+    "category": "Temporal",
+    "question": "What events happened after Lucy Westenra received her first blood transfusion from Arthur Holmwood?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ058",
+    "category": "Temporal",
+    "question": "Did Jonathan Harker's arrival at Castle Dracula occur before or after the ship Demeter ran aground at Whitby?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ059",
+    "category": "Temporal",
+    "question": "List the sequence of events that occurred on the night of Renfield's death.",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ060",
+    "category": "Temporal",
+    "question": "Did the murder of William Frankenstein happen before or after Victor Frankenstein destroyed the female creature he was making?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ061",
+    "category": "Temporal",
+    "question": "What is the chronological order of events from the creature's awakening to his first encounter with the De Lacey family?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ062",
+    "category": "Temporal",
+    "question": "Did Henry Clerval's arrival in Ingolstadt occur before or after the monster came to life?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ063",
+    "category": "Temporal",
+    "question": "What is the chronological order of Edmond Dantès' major acts of revenge against Fernand, Danglars, and Villefort?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ064",
+    "category": "Temporal",
+    "question": "How many years passed between Dantès' imprisonment in the Château d'If and his re-emergence in Parisian society as the Count?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ065",
+    "category": "Temporal",
+    "question": "Did the financial ruin of Baron Danglars occur before or after the public disgrace of Gérard de Villefort?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ066",
+    "category": "Temporal",
+    "question": "In what order did Mr. Collins propose to Elizabeth Bennet and Charlotte Lucas?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ067",
+    "category": "Temporal",
+    "question": "Did Mr. Darcy's first proposal to Elizabeth happen before or after she learned of Wickham's true character from Darcy's letter?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ068",
+    "category": "Temporal",
+    "question": "What was the sequence of events during Elizabeth Bennet's visit to Pemberley?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ069",
+    "category": "Temporal",
+    "question": "Did Lydia's elopement with Wickham happen before or after Jane and Bingley became engaged?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ070",
+    "category": "Temporal",
+    "question": "List the events of the day of Myrtle Wilson's death in chronological order, starting from the trip to New York.",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ071",
+    "category": "Temporal",
+    "question": "Did Gatsby's reunion with Daisy occur before or after Tom Buchanan confronted Gatsby at the Plaza Hotel?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ072",
+    "category": "Temporal",
+    "question": "When did Nick Carraway first attend one of Gatsby's parties relative to when he first saw Gatsby on the lawn?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ073",
+    "category": "Temporal",
+    "question": "What is the chronological order of Beowulf's three major battles: against Grendel, Grendel's Mother, and the Dragon?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ074",
+    "category": "Temporal",
+    "question": "How many years passed between Beowulf becoming King of the Geats and his final battle with the dragon?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ075",
+    "category": "Temporal",
+    "question": "In what order do the deaths occur in the final scene of Hamlet?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ076",
+    "category": "Temporal",
+    "question": "In Macbeth, did Macbeth's murder of King Duncan happen before or after Banquo's murder?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ077",
+    "category": "Temporal",
+    "question": "What is the sequence of events leading to Romeo and Juliet's secret marriage?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ078",
+    "category": "Temporal",
+    "question": "List the events Alice experiences from the moment she falls down the rabbit hole until she meets the Cheshire Cat.",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ079",
+    "category": "Temporal",
+    "question": "Did Alice's game of croquet with the Queen of Hearts happen before or after the Mad Hatter's tea party?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ080",
+    "category": "Temporal",
+    "question": "What is the timeline of events during the voyage of the Demeter from Varna to Whitby?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ081",
+    "category": "Temporal",
+    "question": "How much time passed between Victor Frankenstein's departure for Ingolstadt and his return to Geneva after creating the monster?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ082",
+    "category": "Temporal",
+    "question": "Did Mercédès' marriage to Fernand Mondego happen before or after Edmond Dantès escaped from the Château d'If?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ083",
+    "category": "Temporal",
+    "question": "In Othello, did Iago first plant the seeds of doubt in Othello's mind before or after Cassio was demoted?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ084",
+    "category": "Temporal",
+    "question": "What is the timeline of major parties hosted by Jay Gatsby during the summer of 1922?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ085",
+    "category": "Structural",
+    "question": "List all chapters in Part 1 of 'The Count of Monte Cristo'.",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ086",
+    "category": "Structural",
+    "question": "In which act and scene of 'Hamlet' does the 'To be, or not to be' soliloquy occur?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ087",
+    "category": "Structural",
+    "question": "What is the title or first sentence of Chapter 1 of 'The Great Gatsby'?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ088",
+    "category": "Structural",
+    "question": "How many chapters are in 'Pride and Prejudice'?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ089",
+    "category": "Structural",
+    "question": "Which scenes are in Act I of 'Romeo and Juliet'?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ090",
+    "category": "Structural",
+    "question": "What is the last chapter of 'Dracula'?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ091",
+    "category": "Structural",
+    "question": "List all the chapters of 'The Prince'.",
+    "example_books": [
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ092",
+    "category": "Structural",
+    "question": "In which chapter of 'Frankenstein' does the Creature first speak to Victor?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ093",
+    "category": "Structural",
+    "question": "Which characters appear in the first chapter of 'Alice's Adventures in Wonderland'?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ094",
+    "category": "Structural",
+    "question": "Which chapter immediately follows Elizabeth Bennet's rejection of Mr. Collins' proposal in 'Pride and Prejudice'?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ095",
+    "category": "Structural",
+    "question": "How many fitts (sections) make up the epic poem 'Beowulf'?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ096",
+    "category": "Structural",
+    "question": "What are the major parts or books within 'Beowulf'?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ097",
+    "category": "Structural",
+    "question": "In which chapter of 'The Count of Monte Cristo' does Edmond Dantès escape from the Château d'If?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ098",
+    "category": "Structural",
+    "question": "Which books in the corpus are divided into Acts and Scenes?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ099",
+    "category": "Structural",
+    "question": "List the chapters that comprise Volume II of 'Pride and Prejudice'.",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ100",
+    "category": "Structural",
+    "question": "In what chapter of 'Dracula' is Jonathan Harker's first journal entry located?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ101",
+    "category": "Structural",
+    "question": "Which chapter of 'The Great Gatsby' contains the party scene where Nick Carraway meets Gatsby for the first time?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ102",
+    "category": "Structural",
+    "question": "How many total scenes are in 'Macbeth'?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ103",
+    "category": "Structural",
+    "question": "What is the high-level structure of 'Frankenstein' (e.g., letters, chapters)?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ104",
+    "category": "Structural",
+    "question": "In which chapter of 'The Prince' does Machiavelli discuss 'Of Cruelty and Clemency, and Whether It Is Better to Be Loved or Feared'?",
+    "example_books": [
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ105",
+    "category": "Structural",
+    "question": "Find the chapter in 'Alice's Adventures in Wonderland' titled 'A Mad Tea-Party'.",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ106",
+    "category": "Structural",
+    "question": "Which part of 'The Count of Monte Cristo' details Edmond's time in Rome as the Count?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ107",
+    "category": "Structural",
+    "question": "Identify the scene in 'A Midsummer Night's Dream' where the play-within-a-play, 'Pyramus and Thisbe,' is performed.",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ108",
+    "category": "Structural",
+    "question": "List all the structural components (e.g., Letters, Chapters) of 'Frankenstein' in order.",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ109",
+    "category": "Structural",
+    "question": "How many chapters are in the final part of 'The Count of Monte Cristo'?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ110",
+    "category": "Structural",
+    "question": "In which chapter of 'Dracula' does Lucy Westenra receive her three marriage proposals?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ111",
+    "category": "Structural",
+    "question": "What is the number and title of the first chapter of 'Pride and Prejudice'?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ112",
+    "category": "Structural",
+    "question": "Which act of 'King Lear' contains the storm scene on the heath?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ113",
+    "category": "Thematic",
+    "question": "What events in 'The Count of Monte Cristo' are driven by the theme of revenge?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ114",
+    "category": "Thematic",
+    "question": "Which characters in 'Macbeth' are motivated by the theme of ambition, and what key actions do they take as a result?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ115",
+    "category": "Thematic",
+    "question": "How does the theme of social class influence the relationships and marriages in 'Pride and Prejudice'?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ116",
+    "category": "Thematic",
+    "question": "What are the primary themes explored in 'Frankenstein', particularly concerning scientific creation and parental responsibility?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ117",
+    "category": "Thematic",
+    "question": "Which events in 'Hamlet' revolve around the theme of deception and feigned madness?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ118",
+    "category": "Thematic",
+    "question": "What does 'The Prince' teach about the relationship between acquiring power and maintaining morality?",
+    "example_books": [
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ119",
+    "category": "Thematic",
+    "question": "How is the theme of good versus evil represented through the conflict between Van Helsing's group and Count Dracula?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ120",
+    "category": "Thematic",
+    "question": "Do the actions of Edmond Dantès throughout 'The Count of Monte Cristo' represent the theme of justice or vengeance?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ121",
+    "category": "Thematic",
+    "question": "How is the theme of the 'American Dream' and its corruption portrayed in 'The Great Gatsby'?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ122",
+    "category": "Thematic",
+    "question": "Which characters in 'King Lear' explore the theme of madness, and is it a cause or a consequence of their suffering?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ123",
+    "category": "Thematic",
+    "question": "What role does the supernatural (e.g., the witches) play in developing the themes of fate and ambition in 'Macbeth'?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ124",
+    "category": "Thematic",
+    "question": "How does 'Pride and Prejudice' explore the theme of love versus financial security in the context of marriage?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ125",
+    "category": "Thematic",
+    "question": "What actions define Beowulf's character, and what heroic themes (like courage and loyalty) do these actions represent?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ126",
+    "category": "Thematic",
+    "question": "Which characters in 'Frankenstein' experience profound isolation, and how does this theme connect to their monstrous or destructive actions?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ127",
+    "category": "Thematic",
+    "question": "What events or symbols in 'The Great Gatsby' illustrate the theme of appearance versus reality?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ128",
+    "category": "Thematic",
+    "question": "How is the theme of political power and its corruption explored through the conspiracy against Caesar in 'Julius Caesar'?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ129",
+    "category": "Thematic",
+    "question": "How does 'Alice's Adventures in Wonderland' use the theme of nonsense to question adult logic and societal conventions?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ130",
+    "category": "Thematic",
+    "question": "Which characters are involved in acts of betrayal in 'Othello', and how does this drive the play's central themes of jealousy and trust?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ131",
+    "category": "Thematic",
+    "question": "What is the thematic relationship between wealth and moral decay as depicted in 'The Great Gatsby'?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ132",
+    "category": "Thematic",
+    "question": "How does 'Dracula' explore Victorian anxieties about female sexuality and gender roles through the characters of Lucy and Mina?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ133",
+    "category": "Thematic",
+    "question": "How is the theme of the 'outcast' or 'the other' explored through the Creature in 'Frankenstein'?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ134",
+    "category": "Thematic",
+    "question": "Which events in 'Dracula' are associated with the theme of 'fear of the foreign' or 'the unknown'?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ135",
+    "category": "Thematic",
+    "question": "How do the events in 'Romeo and Juliet' explore the theme of fate versus free will?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ136",
+    "category": "Thematic",
+    "question": "What thematic significance does the past hold for the main characters in 'The Great Gatsby', particularly for Gatsby himself?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ137",
+    "category": "Thematic",
+    "question": "Which characters in 'Beowulf' best demonstrate the pagan theme of loyalty to one's lord?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ138",
+    "category": "Thematic",
+    "question": "What does 'Frankenstein' suggest about the thematic line between humanity and monstrosity, and which character is truly the monster?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ139",
+    "category": "Thematic",
+    "question": "How is the theme of order versus chaos explored through the settings of Athens and the enchanted forest in 'A Midsummer Night's Dream'?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ140",
+    "category": "Thematic",
+    "question": "According to 'The Prince', what are the thematic implications of a ruler choosing to be feared rather than loved?",
+    "example_books": [
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ141",
+    "category": "Comparative",
+    "question": "How do the motivations for revenge of Edmond Dantès in 'The Count of Monte Cristo' compare to those of Hamlet in Shakespeare's 'Hamlet'?",
+    "example_books": [
+      "count_of_monte_cristo",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ142",
+    "category": "Comparative",
+    "question": "Compare the nature of the 'monster' in 'Frankenstein' (the Creature) with the monsters in 'Beowulf' (Grendel and his mother).",
+    "example_books": [
+      "frankenstein",
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ143",
+    "category": "Comparative",
+    "question": "How is the theme of social class and marriage portrayed differently in 'Pride and Prejudice' versus 'The Great Gatsby'?",
+    "example_books": [
+      "pride_and_prejudice",
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ144",
+    "category": "Comparative",
+    "question": "What narrative elements are common to both 'Frankenstein' and 'Dracula' as examples of the Gothic Horror genre?",
+    "example_books": [
+      "frankenstein",
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ145",
+    "category": "Comparative",
+    "question": "Compare Machiavelli's advice on maintaining power in 'The Prince' with the actions of historical rulers in Shakespeare's plays, such as Richard III.",
+    "example_books": [
+      "prince",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ146",
+    "category": "Comparative",
+    "question": "Contrast the agency and societal constraints of Elizabeth Bennet in 'Pride and Prejudice' with Alice in 'Alice's Adventures in Wonderland'.",
+    "example_books": [
+      "pride_and_prejudice",
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ147",
+    "category": "Comparative",
+    "question": "How does the depiction of London in 'Dracula' compare to the depiction of Paris in 'The Count of Monte Cristo'?",
+    "example_books": [
+      "dracula",
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ148",
+    "category": "Comparative",
+    "question": "Compare the use of an epistolary narrative structure in 'Dracula' with the first-person narration in 'The Great Gatsby'.",
+    "example_books": [
+      "dracula",
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ149",
+    "category": "Comparative",
+    "question": "How does the supernatural in 'Dracula' differ from the supernatural elements in Shakespeare's 'Macbeth'?",
+    "example_books": [
+      "dracula",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ150",
+    "category": "Comparative",
+    "question": "Compare the creator-creation relationship between Victor Frankenstein and his Creature to that of Prospero and Ariel in 'The Tempest'.",
+    "example_books": [
+      "frankenstein",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ151",
+    "category": "Comparative",
+    "question": "Which books explore the theme of 'ambition' and how do the consequences of ambition differ for their protagonists, like Macbeth and Victor Frankenstein?",
+    "example_books": [
+      "shakespeare_complete",
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ152",
+    "category": "Comparative",
+    "question": "How does Beowulf's concept of heroism compare to the heroism of Edmond Dantès?",
+    "example_books": [
+      "beowulf",
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ153",
+    "category": "Comparative",
+    "question": "Compare the theme of wealth and its corrupting influence in 'The Great Gatsby' and 'The Count of Monte Cristo'.",
+    "example_books": [
+      "great_gatsby",
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ154",
+    "category": "Comparative",
+    "question": "Contrast the self-imposed isolation of Jay Gatsby with the forced isolation of Victor Frankenstein's creature.",
+    "example_books": [
+      "great_gatsby",
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ155",
+    "category": "Comparative",
+    "question": "How do the heroic ethics of 'Beowulf' align with or contradict the political ethics outlined in 'The Prince'?",
+    "example_books": [
+      "beowulf",
+      "prince"
+    ]
+  },
+  {
+    "id": "CQ156",
+    "category": "Comparative",
+    "question": "Compare the views on love and marriage presented in 'Pride and Prejudice' with those in Shakespeare's comedies, like 'Much Ado About Nothing'.",
+    "example_books": [
+      "pride_and_prejudice",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ157",
+    "category": "Comparative",
+    "question": "How does the fantasy world of 'Alice's Adventures in Wonderland' compare to the dream sequences and prophecies in Shakespeare's plays?",
+    "example_books": [
+      "alice_in_wonderland",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ158",
+    "category": "Comparative",
+    "question": "Compare the villainy and manipulative nature of Count Dracula to that of Iago from 'Othello'.",
+    "example_books": [
+      "dracula",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ159",
+    "category": "Comparative",
+    "question": "Compare the character arc of Edmond Dantès (transformation through suffering) with that of Elizabeth Bennet (transformation through understanding).",
+    "example_books": [
+      "count_of_monte_cristo",
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ160",
+    "category": "Comparative",
+    "question": "Compare the experience of being an 'outsider' for Count Dracula in London with that of the Creature in 'Frankenstein'.",
+    "example_books": [
+      "dracula",
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ161",
+    "category": "Comparative",
+    "question": "Which authors from the corpus were literary contemporaries?",
+    "example_books": [
+      "pride_and_prejudice",
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ162",
+    "category": "Comparative",
+    "question": "Compare the physical and metaphorical journey of Alice in 'Alice's Adventures in Wonderland' with the epic quest of Beowulf.",
+    "example_books": [
+      "alice_in_wonderland",
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ163",
+    "category": "Comparative",
+    "question": "How do 'Frankenstein' and 'Beowulf' explore the definition of what it means to be human versus monstrous?",
+    "example_books": [
+      "frankenstein",
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ164",
+    "category": "Comparative",
+    "question": "Compare the ideal of a ruler presented in 'The Prince' with the flawed reign of King Lear.",
+    "example_books": [
+      "prince",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ165",
+    "category": "Comparative",
+    "question": "In which book does the primary setting have a greater influence on the plot: 'The Great Gatsby' or 'Dracula'?",
+    "example_books": [
+      "great_gatsby",
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ166",
+    "category": "Comparative",
+    "question": "Compare the role of mentor figures, such as Abbé Faria in 'The Count of Monte Cristo' and the Cheshire Cat in 'Alice's Adventures in Wonderland'.",
+    "example_books": [
+      "count_of_monte_cristo",
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ167",
+    "category": "Comparative",
+    "question": "Which book features a greater number of distinct named locations: 'The Count of Monte Cristo' or 'Dracula'?",
+    "example_books": [
+      "count_of_monte_cristo",
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ168",
+    "category": "Comparative",
+    "question": "How does the role of science and technology in 'Frankenstein' compare to the role of fate and prophecy in 'Macbeth'?",
+    "example_books": [
+      "frankenstein",
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ169",
+    "category": "Spatial",
+    "question": "Where does Jonathan Harker travel to from London at the beginning of Dracula?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ170",
+    "category": "Spatial",
+    "question": "What is the sea route of the ship Demeter from Varna to Whitby?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ171",
+    "category": "Spatial",
+    "question": "Which characters travel from London to Transylvania to hunt Count Dracula at the end of the book?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ172",
+    "category": "Spatial",
+    "question": "Where in London are Count Dracula's boxes of earth transported to from Carfax Abbey?",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ173",
+    "category": "Spatial",
+    "question": "Where is Edmond Dantès imprisoned at the start of The Count of Monte Cristo?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ174",
+    "category": "Spatial",
+    "question": "How does Edmond Dantès travel from the Château d'If to the Isle of Monte Cristo?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ175",
+    "category": "Spatial",
+    "question": "Trace the Count of Monte Cristo's journey through Rome during the carnival.",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ176",
+    "category": "Spatial",
+    "question": "Where does the final confrontation between the Count and Fernand Mondego take place?",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ177",
+    "category": "Spatial",
+    "question": "Where does Victor Frankenstein travel to create his monster?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ178",
+    "category": "Spatial",
+    "question": "What is the path of Victor Frankenstein's pursuit of his monster across Europe and into the Arctic?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ179",
+    "category": "Spatial",
+    "question": "Where does the monster go immediately after leaving Victor's laboratory in Ingolstadt?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ180",
+    "category": "Spatial",
+    "question": "Which locations in the British Isles does Victor travel to while planning the creation of the female monster?",
+    "example_books": [
+      "frankenstein"
+    ]
+  },
+  {
+    "id": "CQ181",
+    "category": "Spatial",
+    "question": "Where does Mr. Bingley move to from London at the beginning of Pride and Prejudice?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ182",
+    "category": "Spatial",
+    "question": "What is the route of Elizabeth Bennet's journey from Longbourn to Hunsford and Rosings Park?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ183",
+    "category": "Spatial",
+    "question": "Where do Lydia Bennet and Mr. Wickham travel to after eloping from Brighton?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ184",
+    "category": "Spatial",
+    "question": "Which locations do Elizabeth and the Gardiners visit on their tour of Derbyshire?",
+    "example_books": [
+      "pride_and_prejudice"
+    ]
+  },
+  {
+    "id": "CQ185",
+    "category": "Spatial",
+    "question": "Where does Beowulf travel from to reach Heorot in Denmark?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ186",
+    "category": "Spatial",
+    "question": "Where is Grendel's mother's lair located in relation to Heorot hall?",
+    "example_books": [
+      "beowulf"
+    ]
+  },
+  {
+    "id": "CQ187",
+    "category": "Spatial",
+    "question": "In Hamlet, where is Hamlet sent by ship after killing Polonius?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ188",
+    "category": "Spatial",
+    "question": "In Romeo and Juliet, where is Romeo exiled to from Verona?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ189",
+    "category": "Spatial",
+    "question": "In The Tempest, from which city were Prospero and Miranda exiled before arriving on the island?",
+    "example_books": [
+      "shakespeare_complete"
+    ]
+  },
+  {
+    "id": "CQ190",
+    "category": "Spatial",
+    "question": "From which locations do characters travel to attend Gatsby's parties?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ191",
+    "category": "Spatial",
+    "question": "What is the path of the car journey from Long Island to the Plaza Hotel in New York City on the day of Myrtle's death?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  },
+  {
+    "id": "CQ192",
+    "category": "Spatial",
+    "question": "Where does the White Rabbit lead Alice to at the start of her adventure?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ193",
+    "category": "Spatial",
+    "question": "How does Alice move between the Mad Hatter's tea party and the Queen of Hearts' croquet ground?",
+    "example_books": [
+      "alice_in_wonderland"
+    ]
+  },
+  {
+    "id": "CQ194",
+    "category": "Spatial",
+    "question": "Trace the journey of Albert de Morcerf from Paris to Rome for the carnival and back.",
+    "example_books": [
+      "count_of_monte_cristo"
+    ]
+  },
+  {
+    "id": "CQ195",
+    "category": "Spatial",
+    "question": "Map the movements of Mina Harker from Exeter to Budapest and then to Castle Dracula.",
+    "example_books": [
+      "dracula"
+    ]
+  },
+  {
+    "id": "CQ196",
+    "category": "Spatial",
+    "question": "Where do Nick Carraway and Tom Buchanan travel to in the 'valley of ashes'?",
+    "example_books": [
+      "great_gatsby"
+    ]
+  }
+]

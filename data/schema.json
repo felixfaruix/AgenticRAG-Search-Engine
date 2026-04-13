@@ -1,0 +1,255 @@
+{
+  "entity_types": [
+    {
+      "name": "LiteraryWork",
+      "description": "A distinct creative work of literature, such as a book, play, or epic poem.",
+      "examples": [
+        "Dracula",
+        "Frankenstein",
+        "The Great Gatsby",
+        "Beowulf",
+        "The Prince"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Author",
+      "description": "The real-world person who wrote or created a literary work.",
+      "examples": [
+        "Bram Stoker",
+        "Machiavelli",
+        "Shakespeare",
+        "Mary Shelley",
+        "Jane Austen"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Character",
+      "description": "A fictional person, creature, or entity that participates in the narrative of a literary work.",
+      "examples": [
+        "Elizabeth Bennet",
+        "Victor Frankenstein",
+        "Count Dracula",
+        "Jay Gatsby",
+        "Beowulf"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Location",
+      "description": "A specific geographical place, building, region, or setting where events in a literary work occur.",
+      "examples": [
+        "Castle Dracula",
+        "Pemberley",
+        "Heorot",
+        "Château d'If",
+        "West Egg"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Object",
+      "description": "A specific named or notable object relevant to the plot — Excalibur, the poison, the letter. Not generic items unless plot-significant.",
+      "examples": [
+        "Hrunting",
+        "The Demeter",
+        "Treasure of Spada",
+        "Dracula's boxes of earth",
+        "the green light"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Event",
+      "description": "A named or clearly bounded occurrence that changes the state of characters or the world — battles, deaths, marriages, arrivals, betrayals. Not routine actions or dialogue.",
+      "examples": [
+        "murder of William Frankenstein",
+        "Myrtle Wilson's death",
+        "Beowulf's battle against Grendel",
+        "Lydia's elopement with Wickham",
+        "the Mad Hatter's tea party"
+      ],
+      "parent": null
+    },
+    {
+      "name": "TextualComponent",
+      "description": "A structural division or part of a literary work's text, such as a chapter, act, scene, or volume.",
+      "examples": [
+        "Act I of 'Romeo and Juliet'",
+        "Chapter 1 of 'The Great Gatsby'",
+        "Volume II of 'Pride and Prejudice'",
+        "the 'To be, or not to be' soliloquy",
+        "the last chapter of 'Dracula'"
+      ],
+      "parent": null
+    },
+    {
+      "name": "Theme",
+      "description": "A recurring abstract concept explicitly explored across scenes — revenge, jealousy, power, mortality, honor. Must be identifiable from the text, not inferred by literary analysis.",
+      "examples": [
+        "revenge",
+        "ambition",
+        "social class",
+        "the American Dream",
+        "good versus evil"
+      ],
+      "parent": null
+    }
+  ],
+  "relationship_types": [
+    {
+      "name": "WROTE",
+      "description": "Represents the act of an author creating a literary work.",
+      "source_type": "Author",
+      "target_type": "LiteraryWork",
+      "examples": [
+        "Mary Shelley -> Frankenstein",
+        "Bram Stoker -> Dracula",
+        "Jane Austen -> Pride and Prejudice"
+      ]
+    },
+    {
+      "name": "APPEARS_IN",
+      "description": "Links a character to the literary work in which they are featured.",
+      "source_type": "Character",
+      "target_type": "LiteraryWork",
+      "examples": [
+        "Elizabeth Bennet -> Pride and Prejudice",
+        "Count Dracula -> Dracula",
+        "Beowulf -> Beowulf"
+      ]
+    },
+    {
+      "name": "SET_IN",
+      "description": "Indicates a primary geographical or fictional setting of a literary work.",
+      "source_type": "LiteraryWork",
+      "target_type": "Location",
+      "examples": [
+        "The Great Gatsby -> Long Island",
+        "Dracula -> Transylvania",
+        "The Count of Monte Cristo -> Château d'If"
+      ]
+    },
+    {
+      "name": "RELATED_TO",
+      "description": "Describes a significant social, familial, or adversarial relationship between two characters.",
+      "source_type": "Character",
+      "target_type": "Character",
+      "examples": [
+        "Elizabeth Bennet -> Jane Bennet",
+        "Victor Frankenstein -> The Creature",
+        "Romeo -> Juliet"
+      ]
+    },
+    {
+      "name": "PARTICIPATES_IN",
+      "description": "Connects a character to a specific plot event they are involved in.",
+      "source_type": "Character",
+      "target_type": "Event",
+      "examples": [
+        "Edmond Dantès -> Escape from Château d'If",
+        "The Bennet Sisters -> Netherfield Ball",
+        "Beowulf -> Battle with Grendel"
+      ]
+    },
+    {
+      "name": "PRECEDES",
+      "description": "Establishes a chronological sequence, where the source event happens before the target event.",
+      "source_type": "Event",
+      "target_type": "Event",
+      "examples": [
+        "Murder of King Duncan -> Murder of Banquo",
+        "Gatsby's reunion with Daisy -> Confrontation at the Plaza Hotel",
+        "Creature's awakening -> Murder of William Frankenstein"
+      ]
+    },
+    {
+      "name": "IS_PART_OF",
+      "description": "Links a top-level structural component, like a volume or act, to the complete literary work it belongs to.",
+      "source_type": "TextualComponent",
+      "target_type": "LiteraryWork",
+      "examples": [
+        "Chapter 1 -> The Great Gatsby",
+        "Act I -> Romeo and Juliet",
+        "Volume I -> Pride and Prejudice"
+      ]
+    },
+    {
+      "name": "IS_SUBCOMPONENT_OF",
+      "description": "Defines a structural hierarchy within a text, where one component is a direct sub-part of another.",
+      "source_type": "TextualComponent",
+      "target_type": "TextualComponent",
+      "examples": [
+        "Hamlet, Act 1, Scene 1 -> Hamlet, Act 1",
+        "Pride and Prejudice, Chapter 1 -> Pride and Prejudice, Volume 1"
+      ]
+    },
+    {
+      "name": "OCCURS_IN",
+      "description": "Places a narrative event within a specific structural part of the text, like a chapter or scene.",
+      "source_type": "Event",
+      "target_type": "TextualComponent",
+      "examples": [
+        "'To be, or not to be' soliloquy -> Hamlet, Act 3, Scene 1",
+        "Creature's awakening -> Frankenstein, Chapter 5",
+        "Mad Hatter's tea party -> Alice's Adventures in Wonderland, Chapter 7"
+      ]
+    },
+    {
+      "name": "MANIFESTS_THEME",
+      "description": "Connects a specific event in the plot to an abstract theme it represents or explores.",
+      "source_type": "Event",
+      "target_type": "Theme",
+      "examples": [
+        "Dantès's actions against his enemies -> Revenge",
+        "Gatsby's parties -> The American Dream",
+        "Victor's creation of the monster -> Scientific Responsibility"
+      ]
+    },
+    {
+      "name": "USES",
+      "description": "Represents a character possessing or using a significant, named object.",
+      "source_type": "Character",
+      "target_type": "Object",
+      "examples": [
+        "Beowulf -> Hrunting (sword)",
+        "Othello -> The Handkerchief",
+        "King Arthur -> Excalibur"
+      ]
+    },
+    {
+      "name": "TRAVELS_TO",
+      "description": "Represents a character's movement or journey to a specific location.",
+      "source_type": "Character",
+      "target_type": "Location",
+      "examples": [
+        "Jonathan Harker -> Castle Dracula",
+        "Victor Frankenstein -> Ingolstadt",
+        "Beowulf -> Heorot"
+      ]
+    },
+    {
+      "name": "CAUSES",
+      "description": "Indicates that one event directly causes or triggers another event.",
+      "source_type": "Event",
+      "target_type": "Event",
+      "examples": [
+        "Lydia's elopement with Wickham -> Darcy's intervention",
+        "Murder of William Frankenstein -> Justine's trial and execution",
+        "Gatsby's confrontation with Tom -> Myrtle Wilson's death"
+      ]
+    },
+    {
+      "name": "OCCURS_AT",
+      "description": "Places a narrative event at a specific geographical location where it takes place.",
+      "source_type": "Event",
+      "target_type": "Location",
+      "examples": [
+        "Battle with Grendel -> Heorot",
+        "Mad Hatter's tea party -> the garden",
+        "Gatsby's parties -> West Egg"
+      ]
+    }
+  ]
+}
