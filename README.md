@@ -109,4 +109,4 @@ Different retrieval patterns need different index structures. Keyword search nee
 | `data/triples/` | Extracted and validated knowledge graph triples |
 | `data/fine_tuning/` | 1000-query intent classifier dataset (train/eval, Vertex AI format) |
 | `docs/` | Architecture document and images |
-| `scripts/` | Utility scripts |
+
