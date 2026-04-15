@@ -17,7 +17,7 @@ Dear reader/s, this project reflects my approach and consequent thinking process
 I suggest you to start reading this repo from the notebooks: first, you want to inspect the taxonomy and ontology and then the extraction notebook. 
 Some of the concepts are new to me as well, but this is what I prefer when addressing new projects - a good balance between new and consolidated techniques. 
 
-The entire idea starts from one simple assumption: not every question is the same, so they need different retrieval strategies. Every choice is grounded on the most recent research papers on this topic. 
+The entire idea starts from one simple assumption: not every question is the same, so they need different retrieval strategies. Every decision is grounded on the most recent research papers on this topic. 
 
 ----
 
