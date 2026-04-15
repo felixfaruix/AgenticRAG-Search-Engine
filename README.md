@@ -12,7 +12,9 @@
 ![NLTK](https://img.shields.io/badge/NLTK-154F3F?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
 
-Dear reader/s, this project reflects my approach and consequent thinking processes I like to apply to my projects. Evaluation driven, everything quantifiable - if I can't quantify the results, I haven't built anything. A demo is a demo, but building reliable AI systems requires much more effort and A LOT of end-to-end testings. Isolation is unfortunately not easy when it comes to AI applications. Thus, we need to have a good baseline evaluation we can refer to. 
+Dear reader/s, 
+
+this project reflects my approach and consequent thinking processes I like to apply to my projects. Evaluation driven, everything quantifiable - if I can't quantify the results, I haven't built anything. A demo is a demo, but building reliable AI systems requires much more effort and A LOT of end-to-end testings. Isolation is unfortunately not easy when it comes to AI applications. Thus, we need to have a good baseline evaluation we can refer to. 
 
 I suggest you to start reading this repo from the notebooks: first, you want to inspect the taxonomy and ontology and then the extraction notebook. 
 Some of the concepts are new to me as well, but this is what I prefer when addressing new projects - a good balance between new and consolidated techniques. 
