@@ -86,6 +86,8 @@ Different retrieval patterns need different index structures. Keyword search nee
 | Book-level vector index | 800 word book summaries | Thematic Agent |
 | Supermemory memory graph | Validated triples with source chunks, ontology-aware edges | Graph RAG Agent, Comparative Agent |
 
+Contextual vector index (paired contextual chunks and 768-embeddings) are stored in Qdrant, while BM25 retrieval index for keyword matching is performed in-memory. Both are combined for hybrid search with final RRF top-k scoring.
+
 ## Project Structure
 
 - **`docs/ARCHITECTURE.md`**: full system design: agent specifications, storage layout, ingestion pipeline, disambiguation logic, evaluation protocol, and multi-model routing strategy
