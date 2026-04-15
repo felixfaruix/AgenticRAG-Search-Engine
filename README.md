@@ -25,8 +25,10 @@ A multi-agent retrieval system that answers natural language queries over a corp
 
 The ontology schema, extraction pipeline, and evaluation methodology are grounded in recent literature on CQ-driven ontology engineering (Ontogenia, ESWC 2025) and follow current state-of-the-art practices for knowledge graph construction and retrieval-augmented generation.
 
+You can find more information about the architecture in `Architecture.md`.
+
 ```
-          User Query
+           User Query
                |
         Intent Classifier
                |
@@ -49,10 +51,10 @@ The ontology schema, extraction pipeline, and evaluation methodology are grounde
 
 Each agent handles a different retrieval pattern. They share the same orchestrator and entity resolution layer but differ in how they find and return relevant passages.
 
-- **Vector RAG Agent**: single-hop factual queries. Switches between BM25 keyword search (high entity specificity) and dense semantic search (fuzzy recall) over chunked text indexes. Uses reciprocal rank fusion when the sub-classification is uncertain.
-- **Graph RAG Agent**: multi-hop relational and temporal queries. Traverses typed edges in the knowledge graph, collecting source text attached to each node. For temporal queries, restricts traversal to PRECEDES edges and returns ordered event chains.
+- **Vector RAG Agent**: handles single-hop factual queries. It switches between BM25 keyword search (high entity specificity) and dense semantic search (fuzzy recall) over chunked text indexes. Uses reciprocal rank fusion when the sub classification is uncertain.
+- **Graph RAG Agent**: manages multi-hop relational and temporal queries. Traverses typed edges in the knowledge graph, collecting source text attached to each node. For temporal queries, restricts traversal to PRECEDES edges and returns ordered event chains.
 - **Thematic Agent**: broad thematic and exploratory queries. Searches over book-level summary embeddings, then runs a convergence loop that narrows recommendations by asking discriminative preference questions.
-- **Comparative Agent**: cross-book comparisons. Runs parallel search across multiple book containers using both graph traversal and vector search, then aligns results along the comparison dimension extracted from the query.
+- **Comparative Agent**: for book comparisons. Runs parallel search across multiple book containers using both graph traversal and vector search, then aligns results along the comparison dimension extracted from the query.
 - **Synthesis Agent**: not a retrieval agent. Takes passages from all active agents, generates a grounded answer with citations, and runs a verification check. On failure, it writes structured feedback back to the originating agent for retry (max 2 retries).
 
 ## Entity Taxonomy and Ontology - Knowledge Graph
@@ -63,17 +65,17 @@ The knowledge graph is built through a two-stage LLM-driven pipeline documented 
   <img src="docs/images/relationships.png" alt="Ontology Schema" width="600">
 </p>
 
-**Competency questions.** Following the CQ-by-CQ methodology (Chevignard et al., ESWC 2025), we generate ~200 competency questions that define what the ontology must be able to answer. These questions — not sample passages — drive the schema design, avoiding noise injection from raw text.
+**Competency questions.** Following the CQ-by-CQ methodology (Chevignard et al., ESWC 2025), where we generate 200 competency questions that define what the ontology must be able to answer. These questions, which are not sample passages, drive the schema design by avoiding noise injection from raw text.
 
 **Taxonomy.** The LLM produces an entity type hierarchy from the competency questions alone: 8 entity types (Character, Location, Event, Object, Theme, TextualComponent, LiteraryWork, Author) organized to cover factual, relational, temporal, structural, thematic, comparative, and spatial query patterns.
 
 **Ontology.** The schema adds 12 typed relationship types (WROTE, APPEARS_IN, SET_IN, RELATED_TO, PARTICIPATES_IN, PRECEDES, IS_PART_OF, IS_SUBCOMPONENT_OF, OCCURS_IN, MANIFESTS_THEME, USES, TRAVELS_TO) with constrained source/target entity pairs. This follows the principle from Ontogenia that competency questions are sufficient input for schema generation: additional text samples introduce extraction bias without improving schema coverage.
 
-**Validation.** Schema quality is tested by extracting triples from random 800-word passages across the corpus and measuring per-entity-type hit rates. This acts as a proxy for schema completeness, confirming the type system captures the structural patterns present in the texts.
+**Validation.** Schema quality is tested by extracting triples from random 800 word passages across the corpus and measuring per-entity-type hit rates. This acts as a proxy for schema completeness, confirming the type system captures the structural patterns present in the texts.
 
 ## Memory and Storage
 
-Supermemory serves as the unified storage layer, handling both the knowledge graph and per-agent session memory. It natively supports ontology-aware edges, container-scoped storage, and memory graph traversal — which maps directly onto the multi-agent retrieval needs without building a custom graph layer.
+I used Supermemory as the unified storage layer, handling both the knowledge graph and agents' session memory. It natively supports intology edges, container scoped storage, and memory graphs traversal. The latter maps directly onto the multi-agent retrieval needs without building a custom graph layer. It is currently the best memory graph retrieval storage across the majority of the benchmarks.. 
 
 Different retrieval patterns need different index structures. Keyword search needs clean chunks with undiluted term frequencies. Dense semantic search needs contextually enriched chunks with resolved pronouns. Thematic exploration needs book-level representations. Graph traversal needs typed edges with source text attached. The system maintains four separate indexes to serve these patterns:
 
@@ -81,7 +83,7 @@ Different retrieval patterns need different index structures. Keyword search nee
 |---|---|---|
 | Recursive vector index | 512-token chunks, no enrichment | Vector RAG Agent (BM25 keyword search) |
 | Contextual vector index | 512-token chunks with LLM-generated contextual headers | Vector RAG Agent (dense semantic search) |
-| Book-level vector index | ~800-word book summaries | Thematic Agent |
+| Book-level vector index | 800 word book summaries | Thematic Agent |
 | Supermemory memory graph | Validated triples with source chunks, ontology-aware edges | Graph RAG Agent, Comparative Agent |
 
 ## Project Structure
