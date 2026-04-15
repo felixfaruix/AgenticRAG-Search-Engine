@@ -71,8 +71,6 @@ The knowledge graph is built through a two-stage LLM-driven pipeline documented 
 
 **Ontology.** The schema adds 12 typed relationship types (WROTE, APPEARS_IN, SET_IN, RELATED_TO, PARTICIPATES_IN, PRECEDES, IS_PART_OF, IS_SUBCOMPONENT_OF, OCCURS_IN, MANIFESTS_THEME, USES, TRAVELS_TO) with constrained source/target entity pairs. This follows the principle from Ontogenia that competency questions are sufficient input for schema generation: additional text samples introduce extraction bias without improving schema coverage.
 
-**Validation.** Schema quality is tested by extracting triples from random 800 word passages across the corpus and measuring per-entity-type hit rates. This acts as a proxy for schema completeness, confirming the type system captures the structural patterns present in the texts.
-
 ## Memory and Storage
 
 I used Supermemory as the unified storage layer, handling both the knowledge graph and agents' session memory. It natively supports intology edges, container scoped storage, and memory graphs traversal. The latter maps directly onto the multi-agent retrieval needs without building a custom graph layer. It is currently the best memory graph retrieval storage across the majority of the benchmarks.. 
