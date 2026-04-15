@@ -1,29 +1,18 @@
-"""Read agent results: retrieve another agent's shared results from Supermemory.
-Searches the shared results container by semantic relevance (query provided) or
-lists all entries (no query). Results are reconstructed from the entry_json stored
-in metadata by write_results.
-"""
-from typing import Any
+"""Read agent results: retrieve another agent's shared results from Supermemory."""
+
+from supermemory import Supermemory
 from src.models.agent_contracts import SharedResultEntry
 from src.session import results_container
 
-def read_agent_results(agent_type: str, session_id: str, sm_client: Any, query: str | None = None) -> list[SharedResultEntry]:
-    """Read SharedResultEntry entries from another agent's shared container.
-    If query is provided, search by semantic relevance against passage texts.
-    Otherwise list all entries for that session.
-    """
+
+def read_agent_results(agent_type: str, session_id: str, sm_client: Supermemory, query: str | None = None) -> list[SharedResultEntry]:
+    """Read SharedResultEntry entries from another agent's shared container."""
     container: str = results_container(agent_type, session_id)
-
-    if query:
-        results = sm_client.memory.search(query=query, container=container, top_k=50)
-    else:
-        results = sm_client.memory.list(container=container)
-
+    results = sm_client.search.execute(q=query or "retrieval results", container_tags=[container], limit=50)
     entries: list[SharedResultEntry] = []
-    for mem in results.memories:
-        meta: dict = mem.metadata or {}
-        entry_json: str | None = meta.get("entry_json")
-        if not entry_json:
+    for r in results.results:
+        entry_json: str | None = (r.metadata or {}).get("entry_json")
+        if not entry_json or not isinstance(entry_json, str):
             continue
         try:
             entries.append(SharedResultEntry.model_validate_json(entry_json))

@@ -4,13 +4,14 @@ On retry, increases the number of book summaries returned.
 """
 from typing import Any
 import numpy as np
+from supermemory import Supermemory
 from vertexai.language_models import TextEmbeddingModel
 from src.models.agent_contracts import AgentResult, Passage, ScratchpadEntry
 from src.tools.book_summary_search import book_summary_search
 from src.tools.write_scratchpad import write_scratchpad
 
 def run_thematic(state: dict[str, Any], summaries: list[dict[str, Any]], summary_embeddings: np.ndarray,
-                 embedding_model: TextEmbeddingModel, sm_client: Any) -> AgentResult:
+                 embedding_model: TextEmbeddingModel, sm_client: Supermemory) -> AgentResult:
     """Dense cosine similarity search over book-level summaries.
     Returns book-level passages ranked by relevance to the query.
     """

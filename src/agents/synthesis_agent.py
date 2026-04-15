@@ -5,6 +5,7 @@ results to Supermemory on success.
 """
 import instructor
 from typing import Any
+from supermemory import Supermemory
 from pydantic import BaseModel, Field
 from src.models.agent_contracts import AgentResult, GroundingResult, Passage, SharedResultEntry, SynthesizedAnswer
 from src.tools.grounding_check import grounding_check
@@ -49,7 +50,7 @@ def format_passages_for_synthesis(passages: list[Passage]) -> str:
     return "\n\n".join(parts)
 
 def run_synthesis(state: dict[str, Any], model: str, client: instructor.Instructor,
-                  sm_client: Any) -> SynthesizedAnswer:
+                  sm_client: Supermemory) -> SynthesizedAnswer:
     """Generate a grounded answer from retrieved passages and verify via grounding check.
     On grounding success, persists each contributing agent's results to Supermemory.
     """

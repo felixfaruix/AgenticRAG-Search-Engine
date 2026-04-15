@@ -3,8 +3,9 @@ Activated when the router selects vector_rag based on single hop_count and passa
 On retry, broadens retrieval by switching method, increasing top_k, or removing book filter.
 """
 from typing import Any
-import numpy as np
+from qdrant_client import QdrantClient
 from rank_bm25 import BM25Okapi
+from supermemory import Supermemory
 from vertexai.language_models import TextEmbeddingModel
 from src.models.agent_contracts import AgentResult, Passage, ResolvedEntity, ScratchpadEntry
 from src.tools.vector_search import vector_search
@@ -12,8 +13,9 @@ from src.tools.write_scratchpad import write_scratchpad
 
 method_map: dict[str, str] = {"factual": "bm25", "fuzzy": "dense", "mixed": "hybrid"}
 
-def run_vector_rag(state: dict[str, Any], chunks: list[Any], enriched_chunks: list[Any],
-                   bm25_index: BM25Okapi, embeddings: np.ndarray, embedding_model: TextEmbeddingModel, sm_client: Any) -> AgentResult:
+def run_vector_rag(state: dict[str, Any], qdrant_client: QdrantClient, collection_name: str,
+                   embedding_model: TextEmbeddingModel, bm25_index: BM25Okapi, chunks: list[dict],
+                   sm_client: Supermemory) -> AgentResult:
     """Retrieve passages via BM25, dense cosine similarity, or hybrid RRF fusion.
     Reads sub_classification from state to select retrieval method.
     On retry, reads grounding feedback from state and adjusts strategy.
@@ -38,10 +40,10 @@ def run_vector_rag(state: dict[str, Any], chunks: list[Any], enriched_chunks: li
         if attempt >= 3:
             book_id = None
 
-    passages: list[Passage] = vector_search(query, method, chunks, enriched_chunks, bm25_index,
-                                            embeddings, embedding_model, book_id, top_k)
+    passages: list[Passage] = vector_search(query, method, qdrant_client, collection_name,
+                                            embedding_model, bm25_index, chunks, book_id, top_k)
 
-    scratchpad: ScratchpadEntry = ScratchpadEntry(session_id=session_id, agent_type="vector_rag", 
+    scratchpad: ScratchpadEntry = ScratchpadEntry(session_id=session_id, agent_type="vector_rag",
                                                 attempt_number=attempt, tool_name="vector_search",
                                                 tool_params={"method": method, "book_id": book_id, "top_k": top_k},
                                                 passages_returned=len(passages), top_score=passages[0].score if passages else None,
@@ -49,6 +51,6 @@ def run_vector_rag(state: dict[str, Any], chunks: list[Any], enriched_chunks: li
     write_scratchpad(scratchpad, sm_client)
 
     return AgentResult(session_id=session_id, agent_type="vector_rag", query_text=query, retrieved_passages=passages,
-                        identified_books=list({p.book_id for p in passages}), 
+                        identified_books=list({p.book_id for p in passages}),
                         confidence=passages[0].score if passages else 0.0,
                         tool_calls_made=[{"tool": "vector_search", "method": method, "book_id": book_id, "top_k": top_k}])

@@ -12,6 +12,15 @@
 ![NLTK](https://img.shields.io/badge/NLTK-154F3F?logo=python&logoColor=white)
 ![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=streamlit&logoColor=white)
 
+Dear reader/s, this is a showcase of the level of thinking I like to apply in my projects. Evaluation driven, everything quantifiable - if I can't quantify the results, I haven't built anythig. It is clearly not production ready, but we can discuss what would change if so. A demo is a demo, but building reliable AI systems requires much more effort and A LOT of end-to-end testings. Isolation is unfortunately not easy when it comes to AI application. Thus, we need to have a good baseline evaluation we can refer to. 
+
+I suggest you to start reading this repo from the notebooks: first, you want to inspect the taxonomy and ontology one, then the extraction notebook. 
+Some of the concepts are new to me, but this is what I like about addressing a new project - a good balance between new and old stuff. 
+
+The entire idea starts from one simple fact: not every question is the same, so they need different retrieval strategies. 
+
+----
+
 A multi-agent retrieval system that answers natural language queries over a corpus of 9 public-domain literary texts. The core idea is that different query types need different retrieval mechanisms: factual lookups work best with vector search, relational questions need graph traversal, thematic exploration needs book-level summaries. Instead of forcing one approach, an orchestrator classifies the query and routes it to the right agent.
 
 The ontology schema, extraction pipeline, and evaluation methodology are grounded in recent literature on CQ-driven ontology engineering (Ontogenia, ESWC 2025) and follow current state-of-the-art practices for knowledge graph construction and retrieval-augmented generation.
@@ -83,3 +92,19 @@ Different retrieval patterns need different index structures. Keyword search nee
 ## Corpus
 
 9 Gutenberg books: Alice in Wonderland, Beowulf, The Count of Monte Cristo, Dracula, Frankenstein, The Great Gatsby, Pride and Prejudice, The Prince, The Complete Works of Shakespeare.
+
+## Folders
+
+| Path | Contents |
+|---|---|
+| `src/agents/` | Intent classifier, orchestrator, retrieval agents, synthesis agent |
+| `src/models/` | Pydantic contracts shared across agents and tools |
+| `src/tools/` | Vector search, graph search, grounding check, scratchpad/results I/O |
+| `src/config/` | Model routing and client initialization |
+| `notebooks/` | Taxonomy/ontology pipeline, extraction pipeline |
+| `data/aliases/` | Per-book entity alias indexes for RapidFuzz resolution |
+| `data/books/` | Raw Gutenberg text files |
+| `data/triples/` | Extracted and validated knowledge graph triples |
+| `data/fine_tuning/` | 1000-query intent classifier dataset (train/eval, Vertex AI format) |
+| `docs/` | Architecture document and images |
+| `scripts/` | Utility scripts |

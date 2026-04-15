@@ -3,13 +3,13 @@ import instructor
 from pydantic import BaseModel, Field
 from src.models.agent_contracts import GroundingResult, Passage
 
-graunding_prompt: str = """\
+grounding_prompt: str = """\
 You are a grounding verifier for a literary search engine.
 
 **User query:** {query}
 
 **Generated answer:** {answer}
-
+   
 **Retrieved passages:**
 {passages}
 
@@ -54,7 +54,7 @@ def grounding_check(answer_text: str, passages: list[Passage], original_query: s
                                                                     temperature=0.1,
                                                                     max_retries=2,
                                                                     messages=[{"role": "user", 
-                                                                    "content": graunding_prompt.format(
+                                                                    "content": grounding_prompt.format(
                                                                             query=original_query, answer=answer_text, 
                                                                             passages=format_passages(passages))}])
 

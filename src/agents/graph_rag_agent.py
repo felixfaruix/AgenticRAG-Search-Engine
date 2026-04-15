@@ -4,11 +4,12 @@ For temporal queries, restricts traversal to OCCURS_BEFORE edges.
 On retry, increases max_hops, broadens top_k, or drops relationship filter.
 """
 from typing import Any
+from supermemory import Supermemory
 from src.models.agent_contracts import AgentResult, Passage, ResolvedEntity, ScratchpadEntry
 from src.tools.graph_search import graph_search
 from src.tools.write_scratchpad import write_scratchpad
 
-def run_graph_rag(state: dict[str, Any], sm_client: Any) -> AgentResult:
+def run_graph_rag(state: dict[str, Any], sm_client: Supermemory) -> AgentResult:
     """Traverse typed edges in the Supermemory memory graph from resolved entity nodes.
     Collects source chunk text from each traversed node as retrieval output.
     """
@@ -41,6 +42,7 @@ def run_graph_rag(state: dict[str, Any], sm_client: Any) -> AgentResult:
                      "relationship_type": relationship_type, "max_hops": max_hops, "top_k": top_k},
         passages_returned=len(passages), top_score=passages[0].score if passages else None,
         success=True, grounding_feedback=feedback)
+    
     write_scratchpad(scratchpad, sm_client)
 
     return AgentResult(session_id=session_id, agent_type="graph_rag", query_text=query, retrieved_passages=passages,

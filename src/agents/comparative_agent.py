@@ -4,16 +4,18 @@ Searches each target book via hybrid vector search and graph traversal,
 then deduplicates and ranks the combined results.
 """
 from typing import Any
-import numpy as np
+from qdrant_client import QdrantClient
 from rank_bm25 import BM25Okapi
+from supermemory import Supermemory
 from vertexai.language_models import TextEmbeddingModel
 from src.models.agent_contracts import AgentResult, Passage, ResolvedEntity, ScratchpadEntry
 from src.tools.vector_search import vector_search
 from src.tools.graph_search import graph_search
 from src.tools.write_scratchpad import write_scratchpad
 
-def run_comparative(state: dict[str, Any], chunks: list[Any], enriched_chunks: list[Any],
-                    bm25_index: BM25Okapi, embeddings: np.ndarray, embedding_model: TextEmbeddingModel, sm_client: Any) -> AgentResult:
+def run_comparative(state: dict[str, Any], qdrant_client: QdrantClient, collection_name: str,
+                    embedding_model: TextEmbeddingModel, bm25_index: BM25Okapi, chunks: list[dict],
+                    sm_client: Supermemory) -> AgentResult:
     """Search multiple books in parallel using hybrid vector search and graph traversal.
     The orchestrator passes resolved entities spanning multiple books.
     """
@@ -27,8 +29,8 @@ def run_comparative(state: dict[str, Any], chunks: list[Any], enriched_chunks: l
     tool_calls: list[dict[str, Any]] = []
 
     for bid in book_ids:
-        vec_passages: list[Passage] = vector_search(query, "hybrid", chunks, enriched_chunks, bm25_index,
-                                                    embeddings, embedding_model, book_id=bid, top_k=top_k_per_book)
+        vec_passages: list[Passage] = vector_search(query, "hybrid", qdrant_client, collection_name,
+                                                    embedding_model, bm25_index, chunks, book_id=bid, top_k=top_k_per_book)
         all_passages.extend([p.model_copy(update={"retrieval_agent": "comparative"}) for p in vec_passages])
         tool_calls.append({"tool": "vector_search", "method": "hybrid", "book_id": bid, "top_k": top_k_per_book})
 
