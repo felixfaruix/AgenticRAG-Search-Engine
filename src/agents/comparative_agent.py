@@ -42,7 +42,6 @@ def run_comparative(state: dict[str, Any], qdrant_client: QdrantClient, collecti
             all_passages.extend([p.model_copy(update={"retrieval_agent": "comparative"}) for p in graph_passages])
             tool_calls.append({"tool": "graph_search", "start_node_ids": node_ids, "book_id": bid})
 
-    # deduplicate by (book, chapter, chunk), keep highest score
     seen: dict[str, Passage] = {}
     
     for p in all_passages:

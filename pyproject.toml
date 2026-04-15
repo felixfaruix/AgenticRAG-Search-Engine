@@ -25,4 +25,5 @@ dependencies = [
     "supermemory>=3.33.0",
     "qdrant-client>=1.17.0",
     "vertexai>=1.71.1",
+    "streamlit>=1.56"
 ]

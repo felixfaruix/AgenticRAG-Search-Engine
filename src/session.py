@@ -3,7 +3,7 @@ The orchestrator calls create_session_id() once per incoming query. That ID flow
 through LangGraph state into every agent and every Supermemory write. Container
 names are deterministic from (agent_type, session_id) so any component can
 reconstruct them without passing container references around.
-Supermemory auto-creates containers on first write — no explicit creation step needed.
+Supermemory auto-creates containers on first write with no explicit creation step needed.
 """
 
 import uuid
