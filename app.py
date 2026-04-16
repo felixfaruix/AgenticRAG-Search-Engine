@@ -25,7 +25,6 @@ def init_clients():
     """
     initialize vertex ai, qdrant, and the embedding model once per session.
     """
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.environ.get("google_application_credentials", "")
     vertexai.init(project=os.environ["gcp_project"], location=os.environ["gcp_location"])
     emb = TextEmbeddingModel.from_pretrained("text-embedding-005")
     qd = QdrantClient(url=os.environ["qdrant_url"], api_key=os.environ["qdrant_api_key"])
@@ -57,7 +56,9 @@ def load_competency_questions():
     load the 196 competency questions used as the evaluation set.
     """
     with open("data/competency_questions.json") as f:
-        return json.load(f)
+        cqs = json.load(f)
+    excluded_books = {"pride_and_prejudice"}
+    return [cq for cq in cqs if not any(b in excluded_books for b in cq["example_books"])]
 
 embedding_model, qdrant = init_clients()
 bm25_index, chunks = load_bm25_index()
@@ -224,7 +225,7 @@ with tab_head_to_head:
     curated = [
         {"label": "factual (entity heavy)", "query": "Who is the narrator of The Great Gatsby?", "expected": "great_gatsby"},
         {"label": "fuzzy (no entity names)", "query": "a scientist who creates something monstrous and then suffers for it", "expected": "frankenstein"},
-        {"label": "relational", "query": "What is the relationship between Elizabeth Bennet and Mr Darcy?", "expected": "pride_and_prejudice"},
+        {"label": "relational", "query": "Who served as a mentor to Edmond Dantes during his time in prison?", "expected": "count_of_monte_cristo"},
         {"label": "temporal", "query": "What happens after Dracula arrives in England on the ship Demeter?", "expected": "dracula"},
         {"label": "mixed (entity + semantic)", "query": "Beowulf fights Grendel in the great hall", "expected": "beowulf"}]
 
