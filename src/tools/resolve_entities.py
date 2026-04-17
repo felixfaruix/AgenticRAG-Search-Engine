@@ -31,5 +31,7 @@ def resolve_entities(raw_mentions: list[str], alias_index: dict[str, list[dict[s
             resolved.append(best_match)
 
     resolved.sort(key=lambda e: e.confidence, reverse=True)
-
     return resolved
+
+
+

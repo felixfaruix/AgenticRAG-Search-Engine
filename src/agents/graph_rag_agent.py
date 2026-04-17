@@ -46,6 +46,6 @@ def run_graph_rag(state: dict[str, Any], sm_client: Supermemory) -> AgentResult:
     write_scratchpad(scratchpad, sm_client)
 
     return AgentResult(session_id=session_id, agent_type="graph_rag", query_text=query, retrieved_passages=passages,
-        identified_books=list({p.book_id for p in passages}), confidence=passages[0].score if passages else 0.0,
+        identified_books=list({p.book_id for p in passages}),
         tool_calls_made=[{"tool": "graph_search", "start_node_ids": node_ids, "book_id": book_id,
                          "relationship_type": relationship_type, "max_hops": max_hops}])

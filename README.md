@@ -88,6 +88,12 @@ Different retrieval patterns need different index structures. Keyword search nee
 
 Contextual vector index (paired contextual chunks and 768-embeddings) are stored in Qdrant, while BM25 retrieval index for keyword matching is performed in-memory. Both are combined for hybrid search with final RRF top-k scoring.
 
+## Retrieval Evaluation
+
+i ran a benchmark of 49 queries across 7 categories (factual, relational, temporal, structural, thematic, comparative, spatial) against 5 retrieval methods: bm25 keyword search, dense vector search, hybrid (bm25 + dense with reciprocal rank fusion), thematic book-level search, and supermemory graph traversal. i measured hit@1 (did the top result come from the correct book), mrr (mean reciprocal rank across top 5), and context precision (an llm judge scoring whether retrieved passages are actually relevant, not just from the right book). this gives a baseline to compare how each method handles different query types and where it breaks down. the full notebook is in `notebooks/retrieval_evaluation.ipynb`.
+
+this is a fundamental sanity check, not a comprehensive evaluation. i only measure book-level correctness because i lack passage-level ground truth labels, so a method can score well by returning any chunk from the right book. more granular evaluation with human-annotated passage relevance, end-to-end answer quality scoring, and latency profiling under load would be preferred for production readiness.
+
 ## Project Structure
 
 - **`docs/ARCHITECTURE.md`**: full system design: agent specifications, storage layout, ingestion pipeline, disambiguation logic, evaluation protocol, and multi-model routing strategy

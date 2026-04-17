@@ -14,7 +14,6 @@ Overlaps with ingestion models:
     entity resolution. Different lifecycle, different contract.
   - source_triple on Passage references the Triple schema from ingestion.
 """
-from datetime import datetime
 from typing import Any, Literal
 from pydantic import BaseModel, Field
 
@@ -28,7 +27,6 @@ class QueryUnderstanding(BaseModel):
     sub_classification: Literal["factual", "fuzzy", "mixed"] = Field(description="Vector agent sub-routing hint")
     extracted_entities: list[str] = Field(description="Raw entity mentions before resolution")
     confidence: float = Field(ge=0.0, le=1.0, description="Classifier self-reported confidence")
-    requires_decomposition: bool = Field(description="True when the query should be split into sub-queries")
 
 class ResolvedEntity(BaseModel):
     """Query-time entity resolution output from the orchestrator via RapidFuzz.
@@ -63,7 +61,6 @@ class AgentResult(BaseModel):
     query_text: str = Field(description="Query or sub-query the agent processed")
     retrieved_passages: list[Passage] = Field(description="Passages retrieved for this query")
     identified_books: list[str] = Field(description="Book IDs the agent determined as relevant")
-    confidence: float = Field(ge=0.0, le=1.0, description="Agent self-reported confidence")
     tool_calls_made: list[dict[str, Any]] = Field(description="Logged tool invocations for observability")
 
 class GroundingResult(BaseModel):
@@ -106,23 +103,6 @@ class SharedResultEntry(BaseModel):
     agent_type: str = Field(description="Agent that produced this result")
     query_text: str = Field(description="Query or sub-query that was processed")
     passages: list[Passage] = Field(description="Final retrieved passages")
-    confidence: float = Field(ge=0.0, le=1.0, description="Agent confidence in these results")
     attempt_number: int = Field(ge=1, description="How many attempts it took")
     grounding_passed: bool = Field(description="Whether synthesis grounding accepted these results")
 
-class ToolCallLog(BaseModel):
-    """One row per tool invocation, logged to PostgreSQL via decorator.
-    """
-    timestamp: datetime = Field(description="UTC timestamp of the tool call")
-    session_id: str = Field(description="Session identifier for tracing")
-    agent_type: str = Field(description="Agent that invoked the tool")
-    tool_name: str = Field(description="Name of the tool function")
-    input_params: dict[str, Any] = Field(description="Serialized tool input parameters")
-    output_summary: str = Field(description="Brief summary of the tool output")
-    output_passage_count: int = Field(ge=0, description="Number of passages in the output")
-    top_score: float | None = Field(default=None, description="Highest passage score, if available")
-    latency_ms: int = Field(ge=0, description="Wall-clock latency in milliseconds")
-    tokens_used: int | None = Field(default=None, description="LLM tokens consumed, if applicable")
-    success: bool = Field(description="Whether the tool call completed without error")
-    error: str | None = Field(default=None, description="Error message on failure")
-    retry_attempt: int = Field(ge=0, description="0 for first attempt, increments on retries")

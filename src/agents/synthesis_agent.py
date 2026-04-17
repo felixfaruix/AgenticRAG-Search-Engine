@@ -80,7 +80,7 @@ def run_synthesis(state: dict[str, Any], model: str, client: instructor.Instruct
         for ar in agent_results:
             entry: SharedResultEntry = SharedResultEntry(
                 session_id=session_id, agent_type=ar.agent_type, query_text=ar.query_text,
-                passages=ar.retrieved_passages, confidence=ar.confidence,
+                passages=ar.retrieved_passages,
                 attempt_number=attempt, grounding_passed=True)
             write_results(entry, sm_client)
 

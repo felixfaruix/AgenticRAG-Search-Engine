@@ -27,7 +27,7 @@ The corpus consists of 9 Gutenberg books spanning diverse genres (gothic horror,
           +---------------------------+      |
           |      Orchestrator         |------+
           |  entity resolution,       |      |
-          |  routing, decomposition   |      |
+          |  routing                  |      |
           |  (LangGraph state graph)  |      |
           +---------------------------+      |
           |           |          |           |
@@ -41,23 +41,19 @@ The corpus consists of 9 Gutenberg books spanning diverse genres (gothic horror,
           +---------------------------+      |
           |   Synthesis Agent         |------+
           |   (grounding loop with    |
-          |    retry mechanism)       |      +------------------+
-          +---------------------------+      |   PostgreSQL     |
-                                             |   (tool call     |
-                                             |    logging,      |
-                                             |    all agents)   |
-                                             +------------------+
+          |    retry mechanism)       |
+          +---------------------------+
 ```
 
 The intent classifier produces structured output validated through Instructor, determining hop complexity, scope, sub-classification, and raw entity mentions. It does not determine which agent to use: routing is a deterministic mapping from hop count and scope that lives in the orchestrator. This separation keeps the classifier focused on fewer fields, improving its reliability. The classifier can be fine-tuned on approximately 1000 synthetic queries, each labeled with query type, hop count, and scope.
 
-The orchestrator receives the classifier's output, performs entity resolution via RapidFuzz, applies the routing table to select the target agent, and dispatches. When confidence is below threshold, it decomposes the query into sub-queries dispatched in dependency order.
+The orchestrator receives the classifier's output, performs entity resolution via RapidFuzz, applies the routing table to select the target agent, and dispatches.
 
 **Agents at a glance:**
 
 - **Vector RAG Agent:** single-hop queries. Uses BM25 keyword search or dense semantic search depending on entity presence and specificity. Operates on chunked text indexes.
 - **Graph RAG Agent:** multi-hop and relational queries. Traverses ontology-aware edges in Supermemory's memory graph, returning source chunks attached to each edge.
-- **Thematic Agent:** broad thematic and exploratory queries. Searches book-level summaries and runs the convergence engine for recommendation narrowing.
+- **Thematic Agent:** broad thematic and exploratory queries. Searches book-level summaries ranked by cosine similarity.
 - **Comparative Agent:** cross-book comparison queries. Parallel search across multiple book containers using both graph traversal and vector search.
 - **Synthesis Agent:** receives retrieved passages from all active agents, generates a grounded answer with citations, runs a grounding verification check, and triggers agent retries via feedback when the answer does not meet quality thresholds.
 
@@ -130,7 +126,7 @@ Each agent has two Supermemory containers per session:
 | `agent_{type}_{session}_scratchpad` | Private to the agent | Full retrieval history per attempt: tool name, parameters, passage count, top score, success/failure, grounding feedback from synthesis on retries. The agent reads this to know what it already tried. No other agent reads it. |
 | `agent_{type}_{session}_results` | Shared, read by other agents | Clean structured output: retrieved passages, confidence, attempt number, grounding status. Other agents and the orchestrator read this via a dedicated read tool. Fixed structure so consumers know what to expect. |
 
-Each agent has two Supermemory tools: `write_scratchpad` for its private container and `write_results` for the shared container. Other agents read shared results via `read_agent_results(agent_type, session_id)`. Context passing between agents in a decomposition chain works through these shared containers: the orchestrator does not pass inline text between agents. Instead, the second agent reads the first agent's shared results container using the session ID.
+Each agent has two Supermemory tools: `write_scratchpad` for its private container and `write_results` for the shared container. Other agents read shared results via `read_agent_results(agent_type, session_id)`.
 
 LangGraph manages the transitions between agents (which agent runs next, when to retry, when to pause for user input). Supermemory manages the persistent data that agents produce and consume.
 
@@ -163,7 +159,7 @@ Supermemory container layout:
 
 ## Synthetic Evaluation Dataset
 
-A powerful model reads each book end-to-end and generates diverse queries with ground truth answers, organized by retrieval mechanism: specific factual (BM25), fuzzy recall (dense search), relational (graph traversal), temporal (temporal edge filtering), comparative (parallel cross-book search), thematic (book summaries), and exploratory (convergence engine).
+A powerful model reads each book end-to-end and generates diverse queries with ground truth answers, organized by retrieval mechanism: specific factual (BM25), fuzzy recall (dense search), relational (graph traversal), temporal (temporal edge filtering), comparative (parallel cross-book search), and thematic (book summaries).
 
 Each query is tagged with expected books, passages, query type, hop count, expected agent, ground truth answer, and specificity score. Approximately 1000 queries are generated, providing sufficient volume to fine-tune the intent classifier.
 
@@ -202,8 +198,6 @@ The thematic agent handles broad thematic and exploratory queries at book-level 
 | Tool | Function |
 |---|---|
 | book_summary_search | Dense search over book-level summaries |
-| browse_features | Expose structured book ratings for convergence |
-| ask_preference | Generate convergence question from highest-variance feature |
 
 ### Comparative Agent
 
@@ -288,32 +282,6 @@ The grounding check and the container writes are tools available to the synthesi
 ## Passage Provenance
 
 Every passage retrieved by any agent carries provenance metadata: book identifier, book title, chapter number, chunk index, passage text, retrieval score, retrieval method (BM25, dense, hybrid, or graph traversal), and the agent that retrieved it. Graph-retrieved passages also carry the traversal path and source triple. This provenance enables citation in the final answer and passage-level evaluation.
-
----
-
-## PostgreSQL Observability
-
-Every tool call is logged to PostgreSQL with a decorator requiring zero code changes to tool functions.
-
-```python
-class ToolCallLog(BaseModel):
-    id: int
-    timestamp: datetime
-    session_id: str
-    agent_type: str
-    tool_name: str
-    input_params: dict
-    output_summary: str
-    output_passage_count: int
-    top_score: float | None
-    latency_ms: int
-    tokens_used: int | None
-    success: bool
-    error: str | None
-    retry_attempt: int
-```
-
-PostgreSQL is queryable at demo time for aggregating latency per agent, counting tool calls per session, and computing retry rates. This observability layer provides operational instrumentation for monitoring and debugging alongside the live demo.
 
 ---
 

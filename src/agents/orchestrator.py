@@ -59,7 +59,7 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
 
     Two model tiers:
       classifier_model / classifier_client — fine-tuned lightweight model for intent classification.
-      synthesis_model / synthesis_client   — powerful model for answer synthesis and grounding.
+      synthesis_model / synthesis_client   — powerfu.  njqu8l model for answer synthesis and grounding.
     Retrieval agents use no LLM; they operate through Qdrant, Supermemory, and embeddings.
     """
 
@@ -69,22 +69,25 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
 
     def resolve_node(state: OrchestratorState) -> dict[str, Any]:
         """Resolve raw entity mentions to canonical graph nodes via RapidFuzz.
+        Only triggers disambiguation when the top match for a mention is below threshold.
+        The resolved list is already sorted by confidence descending, so we only need to
+        check the first result per mention.
         """
         understanding: QueryUnderstanding | None = state["understanding"]
 
         if not understanding or not understanding.extracted_entities:
             return {"resolved_entities": []}
-        
-        resolved: list[ResolvedEntity] = resolve_entities(understanding.extracted_entities, alias_index)
-        low_confidence: list[ResolvedEntity] = [e for e in resolved if e.confidence < disambiguation_threshold]
 
-        if low_confidence:
+        resolved: list[ResolvedEntity] = resolve_entities(understanding.extracted_entities, alias_index)
+
+        if resolved and resolved[0].confidence < disambiguation_threshold:
+            ambiguous: ResolvedEntity = resolved[0]
             clarification: dict[str, Any] = interrupt({
                 "type": "disambiguation",
-                "message": "Some entities could not be resolved with high confidence. Please clarify.",
-                "ambiguous_entities": [{"mention": e.raw_mention, "best_match": e.canonical_name,
-                                        "confidence": e.confidence, "book": e.book_id} for e in low_confidence]})
-            
+                "message": f"Which character do you mean by \"{ambiguous.raw_mention}\"? "
+                           f"The closest match is {ambiguous.canonical_name} from {ambiguous.book_id}, "
+                           f"but I'm not confident. Could you clarify?"})
+
             if isinstance(clarification, dict) and "confirmed_entities" in clarification:
                 resolved = resolve_entities(clarification["confirmed_entities"], alias_index)
 
@@ -140,7 +143,6 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
         result: AgentResult = AgentResult(
             session_id=state["session_id"], agent_type="graph_rag_fallback", query_text=state["query"],
             retrieved_passages=passages, identified_books=list({p.book_id for p in passages}),
-            confidence=passages[0].score if passages else 0.0,
             tool_calls_made=[{"tool": "vector_search", "method": "hybrid", "fallback": True}])
         
         return {"agent_results": [result], "fallback_attempted": True, "attempt_number": 1}

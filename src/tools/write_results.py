@@ -19,7 +19,7 @@ def write_results(entry: SharedResultEntry, sm_client: Supermemory) -> str:
     result = sm_client.add(
         content=format_result_content(entry), container_tag=container,
         metadata={"session_id": entry.session_id, "agent_type": entry.agent_type,
-                  "query_text": entry.query_text, "confidence": entry.confidence,
+                  "query_text": entry.query_text,
                   "attempt_number": float(entry.attempt_number),
                   "grounding_passed": entry.grounding_passed,
                   "entry_json": entry.model_dump_json()})

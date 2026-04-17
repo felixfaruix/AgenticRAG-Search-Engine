@@ -59,4 +59,4 @@ def run_comparative(state: dict[str, Any], qdrant_client: QdrantClient, collecti
     write_scratchpad(scratchpad, sm_client)
 
     return AgentResult(session_id=session_id, agent_type="comparative", query_text=query, retrieved_passages=deduped,
-                        identified_books=book_ids, confidence=deduped[0].score if deduped else 0.0, tool_calls_made=tool_calls)
+                        identified_books=book_ids, tool_calls_made=tool_calls)

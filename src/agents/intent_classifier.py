@@ -15,7 +15,6 @@ Given a user query, determine:
 - sub_classification: "factual" if specific entities/events named, "fuzzy" if vague/paraphrased, "mixed" if both
 - extracted_entities: raw entity mentions (characters, locations, events) exactly as written in the query
 - confidence: your confidence in this classification (0.0 to 1.0)
-- requires_decomposition: true if the query should be split into independent sub-queries
 
 User query: {query}
 """

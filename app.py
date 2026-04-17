@@ -27,7 +27,7 @@ def init_clients():
     """
     vertexai.init(project=os.environ["gcp_project"], location=os.environ["gcp_location"])
     emb = TextEmbeddingModel.from_pretrained("text-embedding-005")
-    qd = QdrantClient(url=os.environ["qdrant_url"], api_key=os.environ["qdrant_api_key"])
+    qd = QdrantClient(url=os.environ["qdrant_url"], api_key=os.environ["qdrant_api_key"], timeout=60)
     return emb, qd
 
 @st.cache_resource

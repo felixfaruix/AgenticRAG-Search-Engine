@@ -52,5 +52,4 @@ def run_vector_rag(state: dict[str, Any], qdrant_client: QdrantClient, collectio
 
     return AgentResult(session_id=session_id, agent_type="vector_rag", query_text=query, retrieved_passages=passages,
                         identified_books=list({p.book_id for p in passages}),
-                        confidence=passages[0].score if passages else 0.0,
                         tool_calls_made=[{"tool": "vector_search", "method": method, "book_id": book_id, "top_k": top_k}])

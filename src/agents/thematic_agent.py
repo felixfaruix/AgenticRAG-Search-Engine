@@ -33,5 +33,5 @@ def run_thematic(state: dict[str, Any], summaries: list[dict[str, Any]], summary
     write_scratchpad(scratchpad, sm_client)
 
     return AgentResult(session_id=session_id, agent_type="thematic", query_text=query, retrieved_passages=passages,
-                        identified_books=list({p.book_id for p in passages}), confidence=passages[0].score if passages else 0.0,
+                        identified_books=list({p.book_id for p in passages}),
                         tool_calls_made=[{"tool": "book_summary_search", "top_k": top_k}])
