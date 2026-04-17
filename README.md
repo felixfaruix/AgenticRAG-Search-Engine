@@ -54,9 +54,9 @@ You can find more information about the architecture in `Architecture.md`.
 Each agent handles a different retrieval pattern. They share the same orchestrator and entity resolution layer but differ in how they find and return relevant passages.
 
 - **Vector RAG Agent**: handles single-hop factual queries. It switches between BM25 keyword search (high entity specificity) and dense semantic search (fuzzy recall) over chunked text indexes. Uses reciprocal rank fusion when the sub classification is uncertain.
-- **Graph RAG Agent**: manages multi-hop relational and temporal queries. Traverses typed edges in the knowledge graph, collecting source text attached to each node. For temporal queries, restricts traversal to PRECEDES edges and returns ordered event chains.
-- **Thematic Agent**: broad thematic and exploratory queries. Searches over book-level summary embeddings, then runs a convergence loop that narrows recommendations by asking discriminative preference questions.
-- **Comparative Agent**: for book comparisons. Runs parallel search across multiple book containers using both graph traversal and vector search, then aligns results along the comparison dimension extracted from the query.
+- **Graph RAG Agent**: manages multi-hop relational and temporal queries. BFS over the knowledge graph, seeded from resolved canonical names and chained through `entity_to` on each hop. Every edge carries its source chunk, so the agent returns real passages rather than bare triples. For temporal queries, traversal is restricted to `OCCURS_BEFORE` edges and returns ordered event chains. On retry, it reads its scratchpad and drops the relationship filter early if the last attempt came back empty.
+- **Thematic Agent**: broad thematic and exploratory queries. Dense cosine similarity over the nine book-level summaries; returns the top-k matches.
+- **Comparative Agent**: for book comparisons. Runs parallel search across every book that resolved entities reach, combining hybrid vector search and graph traversal, then deduplicates by (book, chapter, chunk) and ranks the merged passages by retrieval score.
 - **Synthesis Agent**: not a retrieval agent. Takes passages from all active agents, generates a grounded answer with citations, and runs a verification check. On failure, it writes structured feedback back to the originating agent for retry (max 2 retries).
 
 ## Entity Taxonomy and Ontology - Knowledge Graph
@@ -75,7 +75,7 @@ The knowledge graph is built through a two-stage LLM-driven pipeline documented 
 
 ## Memory and Storage
 
-I used Supermemory as the unified storage layer, handling both the knowledge graph and agents' session memory. It natively supports intology edges, container scoped storage, and memory graphs traversal. The latter maps directly onto the multi-agent retrieval needs without building a custom graph layer. It is currently the best memory graph retrieval storage across the majority of the benchmarks.. 
+I used Supermemory as the unified storage layer, handling both the knowledge graph and agents' session memory. Each book is its own container of triples; every triple is one memory entry whose content is the source chunk and whose metadata carries `entity_from`, `entity_to`, and the relationship type. Graph traversal runs as a BFS on top: each hop is a `search.memories` call with a metadata filter on `entity_from` and the user query as the similarity signal, so the returned edges are the ones whose source chunk is most relevant to the question. This keeps traversal structural (typed edges, scoped per book) without giving up query-aware ranking, and avoids building a custom graph layer.
 
 Different retrieval patterns need different index structures. Keyword search needs clean chunks with undiluted term frequencies. Dense semantic search needs contextually enriched chunks with resolved pronouns. Thematic exploration needs book-level representations. Graph traversal needs typed edges with source text attached. The system maintains four separate indexes to serve these patterns:
 
@@ -93,6 +93,12 @@ Contextual vector index (paired contextual chunks and 768-embeddings) are stored
 I ran a benchmark of 49 queries across 7 categories (factual, relational, temporal, structural, thematic, comparative, spatial) against 5 retrieval methods: bm25 keyword search, dense vector search, hybrid (bm25 + dense with reciprocal rank fusion), thematic book-level search, and supermemory graph traversal. i measured hit@1 (did the top result come from the correct book), mrr (mean reciprocal rank across top 5), and context precision (an llm judge scoring whether retrieved passages are actually relevant, not just from the right book). this gives a baseline to compare how each method handles different query types and where it breaks down. the full notebook is in `notebooks/retrieval_evaluation.ipynb`.
 
 This is a fundamental sanity check, not a comprehensive evaluation. Without ground truth answers, a method can score well by returning any chunk from the right book. More granular evaluation with human-annotated passage relevance, end-to-end answer quality scoring, and latency profiling under load would be preferred for production readiness.
+
+## Running locally
+
+`streamlit run app.py` is the demo entry point. The first tab compiles the full LangGraph orchestrator once per session and runs every query end-to-end: classify → resolve → route → retrieve → synthesize with grounding verification. The other two tabs keep the retrieval ablation views (single-query comparison and batch evaluation against the competency questions).
+
+Tracing is zero-config: set `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` in `.env` and LangGraph streams every node execution, tool call, and grounding check to LangSmith automatically. Useful when you want to see where latency or grounding failures concentrate across a run.
 
 ## Project Structure
 
