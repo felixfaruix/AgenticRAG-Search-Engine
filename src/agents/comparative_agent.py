@@ -1,6 +1,6 @@
-"""Comparative agent: parallel cross-book search combining vector and graph retrieval.
-Activated when the router selects comparative based on cross_book scope.
-Searches each target book via hybrid vector search and graph traversal,
+"""comparative agent: parallel cross-book search combining vector and graph retrieval.
+activated when the router selects comparative based on cross_book scope.
+searches each target book via hybrid vector search and graph traversal,
 then deduplicates and ranks the combined results.
 """
 from typing import Any
@@ -13,11 +13,12 @@ from src.tools.vector_search import vector_search
 from src.tools.graph_search import graph_search
 from src.tools.write_scratchpad import write_scratchpad
 
+
 def run_comparative(state: dict[str, Any], qdrant_client: QdrantClient, collection_name: str,
                     embedding_model: TextEmbeddingModel, bm25_index: BM25Okapi, chunks: list[dict],
                     sm_client: Supermemory) -> AgentResult:
-    """Search multiple books in parallel using hybrid vector search and graph traversal.
-    The orchestrator passes resolved entities spanning multiple books.
+    """search multiple books in parallel using hybrid vector search and graph traversal.
+    the orchestrator passes resolved entities spanning multiple books.
     """
     session_id: str = state["session_id"]
     query: str = state["query"]
@@ -37,26 +38,26 @@ def run_comparative(state: dict[str, Any], qdrant_client: QdrantClient, collecti
         book_entities: list[ResolvedEntity] = [e for e in resolved if e.book_id == bid]
 
         if book_entities:
-            node_ids: list[str] = [e.canonical_id for e in book_entities]
-            graph_passages: list[Passage] = graph_search(node_ids, sm_client, bid, top_k=top_k_per_book)
+            node_ids: list[str] = [e.canonical_name for e in book_entities]
+            graph_passages: list[Passage] = graph_search(node_ids, sm_client, bid, top_k=top_k_per_book, query=query)
             all_passages.extend([p.model_copy(update={"retrieval_agent": "comparative"}) for p in graph_passages])
             tool_calls.append({"tool": "graph_search", "start_node_ids": node_ids, "book_id": bid})
 
     seen: dict[str, Passage] = {}
-    
+
     for p in all_passages:
         key: str = f"{p.book_id}:{p.chapter_number}:{p.chunk_index}"
         if key not in seen or p.score > seen[key].score:
             seen[key] = p
-            
+
     deduped: list[Passage] = sorted(seen.values(), key=lambda p: p.score, reverse=True)
 
     scratchpad: ScratchpadEntry = ScratchpadEntry(session_id=session_id, agent_type="comparative", attempt_number=attempt,
-                                                    tool_name="vector_search+graph_search", 
-                                                    tool_params={"book_ids": book_ids, "top_k_per_book": top_k_per_book},
-                                                    passages_returned=len(deduped), top_score=deduped[0].score if deduped else None,
-                                                    success=True, grounding_feedback=state.get("grounding_feedback"))
+                                                  tool_name="vector_search+graph_search",
+                                                  tool_params={"book_ids": book_ids, "top_k_per_book": top_k_per_book},
+                                                  passages_returned=len(deduped), top_score=deduped[0].score if deduped else None,
+                                                  success=True, grounding_feedback=state.get("grounding_feedback"))
     write_scratchpad(scratchpad, sm_client)
 
     return AgentResult(session_id=session_id, agent_type="comparative", query_text=query, retrieved_passages=deduped,
-                        identified_books=book_ids, tool_calls_made=tool_calls)
+                       identified_books=book_ids, tool_calls_made=tool_calls)

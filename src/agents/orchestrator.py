@@ -1,4 +1,4 @@
-"""Orchestrator: LangGraph state graph wiring all agents into a single retrieval pipeline."""
+"""orchestrator: langgraph state graph wiring all agents into a single retrieval pipeline."""
 
 from typing import Any, TypedDict
 import instructor
@@ -23,10 +23,11 @@ from src.agents.thematic_agent import run_thematic
 from src.agents.comparative_agent import run_comparative
 from src.agents.synthesis_agent import run_synthesis
 
-disambiguation_threshold: float = 0.5
+disambiguation_threshold: float = 0.85
+
 
 class OrchestratorState(TypedDict):
-    """LangGraph state schema carrying all data between nodes."""
+    """langgraph state schema carrying all data between nodes."""
     query: str
     session_id: str
     understanding: QueryUnderstanding | None
@@ -40,14 +41,15 @@ class OrchestratorState(TypedDict):
     production_mode: bool
     fallback_attempted: bool
 
+
 def initial_state(query: str, production_mode: bool = False) -> OrchestratorState:
-    """Create the initial state dict for a new query.
-    """
+    """create the initial state dict for a new query."""
     return OrchestratorState(
         query=query, session_id=create_session_id(), understanding=None,
         resolved_entities=[], routed_agent="", agent_results=[],
         synthesized_answer=None, attempt_number=1, max_attempts=3,
         grounding_feedback=None, production_mode=production_mode, fallback_attempted=False)
+
 
 def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_model: TextEmbeddingModel,
                 bm25_index: BM25Okapi, chunks: list[dict], summaries: list[dict[str, Any]],
@@ -55,23 +57,23 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
                 alias_index: dict[str, list[dict[str, Any]]],
                 classifier_model: str, classifier_client: instructor.Instructor,
                 synthesis_model: str, synthesis_client: instructor.Instructor) -> Any:
-    """Build and compile the orchestrator state graph with checkpointing.
+    """build and compile the orchestrator state graph with checkpointing.
 
-    Two model tiers:
+    two model tiers:
       classifier_model / classifier_client — fine-tuned lightweight model for intent classification.
-      synthesis_model / synthesis_client   — powerfu.  njqu8l model for answer synthesis and grounding.
-    Retrieval agents use no LLM; they operate through Qdrant, Supermemory, and embeddings.
+      synthesis_model / synthesis_client   — powerful model for answer synthesis and grounding.
+    retrieval agents use no llm; they operate through qdrant, supermemory, and embeddings.
     """
 
     def classify_node(state: OrchestratorState) -> dict[str, Any]:
-        """Classify user query into structured intent fields."""
+        """classify user query into structured intent fields."""
         return {"understanding": classify_query(state["query"], classifier_model, classifier_client)}
 
     def resolve_node(state: OrchestratorState) -> dict[str, Any]:
-        """Resolve raw entity mentions to canonical graph nodes via RapidFuzz.
-        Only triggers disambiguation when the top match for a mention is below threshold.
-        The resolved list is already sorted by confidence descending, so we only need to
-        check the first result per mention.
+        """resolve raw entity mentions to canonical graph nodes via rapidfuzz.
+        triggers disambiguation when the top match confidence is below disambiguation_threshold.
+        the resolver returns all candidates above its own lower floor (0.5), so the
+        0.5-to-0.85 band is the ambiguous range that reaches the interrupt.
         """
         understanding: QueryUnderstanding | None = state["understanding"]
 
@@ -94,71 +96,69 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
         return {"resolved_entities": resolved}
 
     def route_node(state: OrchestratorState) -> dict[str, Any]:
-        """Deterministic routing from intent classification to agent type."""
+        """deterministic routing from intent classification to agent type."""
         return {"routed_agent": route_query(state["understanding"]) if state["understanding"] else "vector_rag"}
 
     def dispatch_edge(state: OrchestratorState) -> str:
-        """Dispatch to the agent node selected by route_node."""
+        """dispatch to the agent node selected by route_node."""
         return state["routed_agent"]
 
     def vector_rag_node(state: OrchestratorState) -> dict[str, Any]:
-        """Run vector RAG retrieval."""
+        """run vector rag retrieval."""
         return {"agent_results": [run_vector_rag(state, qdrant_client, collection_name, embedding_model, bm25_index, chunks, sm_client)]}
 
     def graph_rag_node(state: OrchestratorState) -> dict[str, Any]:
-        """Run graph RAG traversal."""
+        """run graph rag traversal."""
         return {"agent_results": [run_graph_rag(state, sm_client)]}
 
     def thematic_node(state: OrchestratorState) -> dict[str, Any]:
-        """Run thematic book-level search."""
+        """run thematic book-level search."""
         return {"agent_results": [run_thematic(state, summaries, summary_embeddings, embedding_model, sm_client)]}
 
     def comparative_node(state: OrchestratorState) -> dict[str, Any]:
-        """Run comparative cross-book search."""
+        """run comparative cross-book search."""
         return {"agent_results": [run_comparative(state, qdrant_client, collection_name, embedding_model, bm25_index, chunks, sm_client)]}
 
     def synthesize_node(state: OrchestratorState) -> dict[str, Any]:
-        """Generate grounded answer, verify, write feedback on failure.
-        """
+        """generate grounded answer, verify, write feedback on failure."""
         answer: SynthesizedAnswer = run_synthesis(state, synthesis_model, synthesis_client, sm_client)
 
         if answer.grounding_passed:
             return {"synthesized_answer": answer}
-        
+
         write_scratchpad(ScratchpadEntry(
             session_id=state["session_id"], agent_type=state["routed_agent"],
             attempt_number=state["attempt_number"], tool_name="grounding_check",
             tool_params={}, passages_returned=len(answer.cited_passages),
             top_score=answer.confidence, success=False,
             grounding_feedback="Grounding failed. Broaden or adjust retrieval strategy."), sm_client)
-        
+
         return {"synthesized_answer": answer, "grounding_feedback": "Grounding failed. Adjust retrieval strategy.",
                 "attempt_number": state["attempt_number"] + 1}
 
     def fallback_node(state: OrchestratorState) -> dict[str, Any]:
-        """Production fallback: graph_rag exhausted retries, try hybrid vector search.
-        """
-        passages: list[Passage] = vector_search(state["query"], "hybrid", qdrant_client, collection_name, embedding_model, bm25_index, chunks, top_k=15)
+        """production fallback: graph_rag exhausted retries, try hybrid vector search."""
+        passages: list[Passage] = vector_search(state["query"], "hybrid", qdrant_client, collection_name,
+                                                embedding_model, bm25_index, chunks, top_k=15)
 
         result: AgentResult = AgentResult(
             session_id=state["session_id"], agent_type="graph_rag_fallback", query_text=state["query"],
             retrieved_passages=passages, identified_books=list({p.book_id for p in passages}),
             tool_calls_made=[{"tool": "vector_search", "method": "hybrid", "fallback": True}])
-        
+
         return {"agent_results": [result], "fallback_attempted": True, "attempt_number": 1}
 
     def post_synthesis_edge(state: OrchestratorState) -> str:
-        """Route after synthesis: done, retry, or fallback.
-        """
+        """route after synthesis: done, retry, or fallback."""
         answer: SynthesizedAnswer | None = state.get("synthesized_answer")
-        
+
         if not answer or answer.grounding_passed:
             return "done"
         if state["attempt_number"] > state["max_attempts"]:
             if state.get("production_mode") and state["routed_agent"] == "graph_rag" and not state.get("fallback_attempted"):
                 return "fallback"
             return "done"
-        
+
         return state["routed_agent"]
 
     graph: StateGraph = StateGraph(OrchestratorState)

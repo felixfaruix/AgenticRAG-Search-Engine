@@ -7,7 +7,7 @@ from typing import Any
 from supermemory import Supermemory
 from src.models.agent_contracts import AgentResult, Passage, ResolvedEntity, ScratchpadEntry
 from src.tools.graph_search import graph_search
-from src.tools.write_scratchpad import write_scratchpad
+from src.tools.write_scratchpad import write_scratchpad, read_scratchpad
 
 def run_graph_rag(state: dict[str, Any], sm_client: Supermemory) -> AgentResult:
     """Traverse typed edges in the Supermemory memory graph from resolved entity nodes.
@@ -20,21 +20,24 @@ def run_graph_rag(state: dict[str, Any], sm_client: Supermemory) -> AgentResult:
     resolved: list[ResolvedEntity] = state.get("resolved_entities", [])
     feedback: str | None = state.get("grounding_feedback")
 
-    node_ids: list[str] = [e.canonical_id for e in resolved]
+    node_ids: list[str] = [e.canonical_name for e in resolved]
     book_ids: list[str] = list({e.book_id for e in resolved})
     book_id: str = book_ids[0] if book_ids else ""
     relationship_type: str | None = "OCCURS_BEFORE" if understanding.query_type == "temporal" else None
     max_hops: int = 2
     top_k: int = 10
 
-    # adjust strategy on retry
+    # adjust strategy on retry, using scratchpad signal rather than attempt count alone
     if attempt > 1 and feedback:
+        prior: list[ScratchpadEntry] = read_scratchpad("graph_rag", session_id, sm_client)
+        empty_last: bool = bool(prior) and prior[-1].passages_returned == 0
+
         max_hops = min(max_hops + 1, 4)
         top_k = min(top_k + 5, 25)
-        if attempt >= 3 and relationship_type:
+        if (attempt >= 3 or empty_last) and relationship_type:
             relationship_type = None
 
-    passages: list[Passage] = graph_search(node_ids, sm_client, book_id, relationship_type, max_hops, top_k)
+    passages: list[Passage] = graph_search(node_ids, sm_client, book_id, relationship_type, max_hops, top_k, query=query)
 
     scratchpad: ScratchpadEntry = ScratchpadEntry(
         session_id=session_id, agent_type="graph_rag", attempt_number=attempt, tool_name="graph_search",

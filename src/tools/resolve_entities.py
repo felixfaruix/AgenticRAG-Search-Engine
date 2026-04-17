@@ -4,11 +4,12 @@ from rapidfuzz import fuzz
 from src.models.agent_contracts import ResolvedEntity
 
 def resolve_entities(raw_mentions: list[str], alias_index: dict[str, list[dict[str, Any]]], book_ids_hint: list[str] | None = None,
-                    threshold: float = 0.7) -> list[ResolvedEntity]:
+                    threshold: float = 0.5) -> list[ResolvedEntity]:
     """Matches raw query mentions to canonical entities via RapidFuzz weighted ratio.
     alias_index: {book_id: [{canonical_name, canonical_id, entity_type, aliases: [str]}]}.
     book_ids_hint: narrow search to these books when co-occurrence resolves scope.
-    threshold: minimum normalized score (0.0-1.0) to accept a match.
+    threshold: minimum normalized score (0.0-1.0) to accept a candidate; the orchestrator
+    treats anything below its own disambiguation cut-off as ambiguous and asks the user.
     """
     books: list[str] = book_ids_hint if book_ids_hint else list(alias_index.keys())
     resolved: list[ResolvedEntity] = []

@@ -1,10 +1,10 @@
-"""Configuration: client initialization, model routing, and naming conventions.
+"""configuration: client initialization, model routing, and naming conventions.
 
-Multi-model routing:
-  - Intent classification uses a fine-tuned lightweight model (high volume, structured output).
-  - Synthesis and grounding use a powerful model (quality-critical, low volume).
-  - Retrieval agents (vector_rag, graph_rag, thematic, comparative) use no LLM;
-    they operate through Qdrant, Supermemory, and embedding models only.
+multi-model routing:
+  - intent classification uses a fine-tuned lightweight model (high volume, structured output).
+  - synthesis and grounding use a powerful model (quality-critical, low volume).
+  - retrieval agents (vector_rag, graph_rag, thematic, comparative) use no llm;
+    they operate through qdrant, kuzu, and embedding models only.
 """
 import os
 
@@ -22,5 +22,5 @@ synthesis_model: str = os.environ.get(
 
 
 def get_classifier_model() -> str:
-    """Return the fine-tuned model endpoint when available, else the base model."""
+    """return the fine-tuned model endpoint when available, else the base model."""
     return classifier_model_tuned or classifier_model
