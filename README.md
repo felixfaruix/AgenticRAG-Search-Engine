@@ -1,4 +1,4 @@
-# Agentic RAG 
+# Query-routed multi-retrieval RAG 
 
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
 ![Hugging Face](https://img.shields.io/badge/Hugging_Face-FFD21E?logo=huggingface&logoColor=black)
