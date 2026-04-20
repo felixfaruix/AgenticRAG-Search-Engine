@@ -16,7 +16,7 @@ from src.tools.write_scratchpad import write_scratchpad
 
 def run_comparative(state: dict[str, Any], qdrant_client: QdrantClient, collection_name: str,
                     embedding_model: TextEmbeddingModel, bm25_index: BM25Okapi, chunks: list[dict],
-                    sm_client: Supermemory) -> AgentResult:
+                    sm_client: Supermemory, chunks_index: dict | None = None) -> AgentResult:
     """search multiple books in parallel using hybrid vector search and graph traversal.
     the orchestrator passes resolved entities spanning multiple books.
     """
@@ -39,7 +39,8 @@ def run_comparative(state: dict[str, Any], qdrant_client: QdrantClient, collecti
 
         if book_entities:
             node_ids: list[str] = [e.canonical_name for e in book_entities]
-            graph_passages: list[Passage] = graph_search(node_ids, sm_client, bid, top_k=top_k_per_book, query=query)
+            graph_passages: list[Passage] = graph_search(node_ids, sm_client, bid, top_k=top_k_per_book,
+                                                         query=query, chunks_index=chunks_index)
             all_passages.extend([p.model_copy(update={"retrieval_agent": "comparative"}) for p in graph_passages])
             tool_calls.append({"tool": "graph_search", "start_node_ids": node_ids, "book_id": bid})
 

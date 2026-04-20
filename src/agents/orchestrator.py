@@ -16,6 +16,7 @@ from src.tools.resolve_entities import resolve_entities
 from src.tools.route_query import route_query
 from src.tools.write_scratchpad import write_scratchpad
 from src.tools.vector_search import vector_search
+from src.tools.rerank import rerank_passages
 from src.agents.intent_classifier import classify_query
 from src.agents.vector_rag_agent import run_vector_rag
 from src.agents.graph_rag_agent import run_graph_rag
@@ -65,6 +66,8 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
     retrieval agents use no llm; they operate through qdrant, supermemory, and embeddings.
     """
 
+    chunks_index: dict = {(c["book_id"], c["chapter_number"], c["chunk_index"]): c for c in chunks}
+
     def classify_node(state: OrchestratorState) -> dict[str, Any]:
         """classify user query into structured intent fields."""
         return {"understanding": classify_query(state["query"], classifier_model, classifier_client)}
@@ -109,7 +112,7 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
 
     def graph_rag_node(state: OrchestratorState) -> dict[str, Any]:
         """run graph rag traversal."""
-        return {"agent_results": [run_graph_rag(state, sm_client)]}
+        return {"agent_results": [run_graph_rag(state, sm_client, chunks_index=chunks_index)]}
 
     def thematic_node(state: OrchestratorState) -> dict[str, Any]:
         """run thematic book-level search."""
@@ -117,7 +120,25 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
 
     def comparative_node(state: OrchestratorState) -> dict[str, Any]:
         """run comparative cross-book search."""
-        return {"agent_results": [run_comparative(state, qdrant_client, collection_name, embedding_model, bm25_index, chunks, sm_client)]}
+        return {"agent_results": [run_comparative(state, qdrant_client, collection_name, embedding_model,
+                                                   bm25_index, chunks, sm_client, chunks_index=chunks_index)]}
+
+    def rerank_node(state: OrchestratorState) -> dict[str, Any]:
+        """second-stage cross-encoder rerank over the routed agent's top-k candidates.
+        narrows to top-3 high-precision passages before synthesis. no-op when the
+        agent returned fewer candidates than the target.
+        """
+        results: list[AgentResult] = state.get("agent_results") or []
+
+        if not results:
+            return {}
+
+        latest: AgentResult = results[-1]
+        reranked: list[Passage] = rerank_passages(state["query"], latest.retrieved_passages, top_n=3,
+                                                   chunks_index=chunks_index)
+        updated: AgentResult = latest.model_copy(update={"retrieved_passages": reranked})
+
+        return {"agent_results": [updated]}
 
     def synthesize_node(state: OrchestratorState) -> dict[str, Any]:
         """generate grounded answer, verify, write feedback on failure."""
@@ -165,7 +186,8 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
     for name, fn in [("classify", classify_node), ("resolve", resolve_node), ("route", route_node),
                      ("vector_rag", vector_rag_node), ("graph_rag", graph_rag_node),
                      ("thematic", thematic_node), ("comparative", comparative_node),
-                     ("synthesize", synthesize_node), ("fallback", fallback_node)]:
+                     ("rerank", rerank_node), ("synthesize", synthesize_node),
+                     ("fallback", fallback_node)]:
         graph.add_node(name, fn)
 
     graph.add_edge(START, "classify")
@@ -175,7 +197,8 @@ def build_graph(qdrant_client: QdrantClient, collection_name: str, embedding_mod
                                 {"vector_rag": "vector_rag", "graph_rag": "graph_rag",
                                  "thematic": "thematic", "comparative": "comparative"})
     for agent in ("vector_rag", "graph_rag", "thematic", "comparative", "fallback"):
-        graph.add_edge(agent, "synthesize")
+        graph.add_edge(agent, "rerank")
+    graph.add_edge("rerank", "synthesize")
     graph.add_conditional_edges("synthesize", post_synthesis_edge,
                                 {"done": END, "vector_rag": "vector_rag", "graph_rag": "graph_rag",
                                  "thematic": "thematic", "comparative": "comparative", "fallback": "fallback"})

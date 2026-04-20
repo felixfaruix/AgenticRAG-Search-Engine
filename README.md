@@ -45,8 +45,12 @@ You can find more information about the architecture in `Architecture.md`.
      |    (KG store,   |          |
      |     agent mem)  |          |
       \        |       /          /
-       Synthesis Agent           /
-       (grounding + citations)  /
+       \       |      /          /
+       Cross-Encoder Rerank
+       (top-k candidates -> top-3 high precision)
+               |
+       Synthesis Agent
+       (grounding + citations)
 ```
 
 ## Agents
@@ -54,10 +58,11 @@ You can find more information about the architecture in `Architecture.md`.
 Each agent handles a different retrieval pattern. They share the same orchestrator and entity resolution layer but differ in how they find and return relevant passages.
 
 - **Vector RAG Agent**: handles single-hop factual queries. It switches between BM25 keyword search (high entity specificity) and dense semantic search (fuzzy recall) over chunked text indexes. Uses reciprocal rank fusion when the sub classification is uncertain.
-- **Graph RAG Agent**: manages multi-hop relational and temporal queries. BFS over the knowledge graph, seeded from resolved canonical names and chained through `entity_to` on each hop. Every edge carries its source chunk, so the agent returns real passages rather than bare triples. For temporal queries, traversal is restricted to `OCCURS_BEFORE` edges and returns ordered event chains. On retry, it reads its scratchpad and drops the relationship filter early if the last attempt came back empty.
+- **Graph RAG Agent**: manages multi-hop relational and temporal queries. BFS over the knowledge graph, seeded from resolved canonical names and chained through `entity_to` on each hop. Every edge carries its source chunk, so the agent returns real passages rather than bare triples. For temporal queries, traversal is restricted to `PRECEDES` edges and returns ordered event chains. On retry, it reads its scratchpad and drops the relationship filter early if the last attempt came back empty.
 - **Thematic Agent**: broad thematic and exploratory queries. Dense cosine similarity over the nine book-level summaries; returns the top-k matches.
 - **Comparative Agent**: for book comparisons. Runs parallel search across every book that resolved entities reach, combining hybrid vector search and graph traversal, then deduplicates by (book, chapter, chunk) and ranks the merged passages by retrieval score.
-- **Synthesis Agent**: not a retrieval agent. Takes passages from all active agents, generates a grounded answer with citations, and runs a verification check. On failure, it writes structured feedback back to the originating agent for retry (max 2 retries).
+- **Cross-Encoder Rerank**: second stage between every retrieval agent and synthesis. The retrieval stage is a bi-encoder: query and passage are embedded independently, so the score is coarse and rank order within the top-k is noisy. The rerank node reads `[query, passage]` jointly through `BAAI/bge-reranker-base` in a single transformer pass, producing a precision-oriented score that reflects whether the passage actually contains the answer. It narrows each agent's top-k candidate set down to the top-3 passages sent to synthesis. This is the standard two-stage IR pattern from MS MARCO and BEIR.
+- **Synthesis Agent**: not a retrieval agent. Takes the reranked top-3 passages from the routed agent, generates a grounded answer with citations, and runs a verification check. On failure, it writes structured feedback back to the originating agent for retry (max 2 retries).
 
 ## Entity Taxonomy and Ontology - Knowledge Graph
 
@@ -90,7 +95,7 @@ Contextual vector index (paired contextual chunks and 768-embeddings) are stored
 
 ## Retrieval Evaluation
 
-I ran a benchmark of 49 queries across 7 categories (factual, relational, temporal, structural, thematic, comparative, spatial) against 5 retrieval methods: bm25 keyword search, dense vector search, hybrid (bm25 + dense with reciprocal rank fusion), thematic book-level search, and supermemory graph traversal. i measured hit@1 (did the top result come from the correct book), mrr (mean reciprocal rank across top 5), and context precision (an llm judge scoring whether retrieved passages are actually relevant, not just from the right book). this gives a baseline to compare how each method handles different query types and where it breaks down. the full notebook is in `notebooks/retrieval_evaluation.ipynb`.
+I ran a benchmark of 140 queries across 7 categories (factual, relational, temporal, structural, thematic, comparative, spatial), 20 queries per category, stored in `data/eval_queries/queries.json` with schema `{category, query, expected}`. Every query is grounded: the answer is retrievable from the ingested corpus, verified during authoring against the entity alias indexes, extracted triples, and chapter metadata of the seven ingested books (Pride and Prejudice and Shakespeare's Complete Works are excluded because their triples were never uploaded to Supermemory). Within each category the queries mix easy anchors (headline entities, titled chapters, core themes) with harder ones (subsidiary characters, less-prominent chapters, subsidiary motifs) so method deltas are not dominated by a single difficulty mode. The benchmark scores five retrieval paths: bm25 keyword search, dense vector search, hybrid (bm25 + dense with reciprocal rank fusion), thematic book-level search, and supermemory graph traversal. Every method except thematic runs the production two-stage pipeline — top-10 bi-encoder/graph retrieval followed by a `BAAI/bge-reranker-base` cross-encoder rerank down to top-3 — so each row's numbers reflect the reranked pipeline, not a bare backbone. The reranker is fed `contextual_header + body` per passage via a `(book_id, chapter_number, chunk_index)` lookup into `contextual_chunks.json`, so the cross-encoder sees the same context the dense embedder had at ingestion. Thematic is excluded from reranking because the book-level index has only 9 summaries and there is no meaningful candidate pool to reorder. I measured hit@1 (did the top result come from the correct book), mrr (mean reciprocal rank across top 5), book_recall@3 (fraction of expected books present in the top 3), book_correctness (fraction of top-5 passages from an expected book, mechanical), and passage_specificity (an llm judge scoring whether each passage actually answers the question, not just comes from the right book). The full notebook is in `notebooks/retrieval_evaluation.ipynb`.
 
 This is a fundamental sanity check, not a comprehensive evaluation. Without ground truth answers, a method can score well by returning any chunk from the right book. More granular evaluation with human-annotated passage relevance, end-to-end answer quality scoring, and latency profiling under load would be preferred for production readiness.
 
@@ -122,5 +127,6 @@ Tracing is zero-config: set `LANGSMITH_TRACING=true` and `LANGSMITH_API_KEY` in 
 | `data/books/` | Raw Gutenberg text files |
 | `data/triples/` | Extracted and validated knowledge graph triples |
 | `data/fine_tuning/` | 1000-query intent classifier dataset (train/eval, Vertex AI format) |
+| `data/eval_queries/` | 140-query benchmark set (`queries.json`) used by `retrieval_evaluation.ipynb` |
 | `docs/` | Architecture document and images |
 

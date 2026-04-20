@@ -6,24 +6,36 @@ search over a container. the earlier implementation searched by text content
 and tried to chain by the raw canonical name against a slugified start id,
 which never aligned. here the bfs seeds and chains by canonical_name
 consistently — the key supermemory already stores on every triple.
+
+performance shape:
+  - each pending entity in a hop fires one http call to supermemory.
+  - calls inside the same hop run in parallel via threadpoolexecutor.
+  - hop-n+1 frontier is capped to the top-N most relevant hop-n targets
+    (ranked by edge similarity to the query) so fan-out stays bounded.
 """
 
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any
 from supermemory import Supermemory
 from src.config.supermemory_client import book_container
 from src.models.agent_contracts import Passage
 
+frontier_cap: int = 5
+max_concurrency: int = 8
+
 
 def graph_search(start_node_names: list[str], sm_client: Supermemory, book_id: str,
                  relationship_type: str | None = None, max_hops: int = 2, top_k: int = 10,
-                 query: str | None = None) -> list[Passage]:
+                 query: str | None = None, chunks_index: dict | None = None) -> list[Passage]:
     """bfs from start_node_names over the supermemory memory graph within one book.
     each hop pulls edges whose metadata.entity_from matches the frontier; the
     source chunk attached to the edge becomes a passage, and entity_to seeds
     the next frontier. when query is provided, supermemory ranks the filtered
     set by similarity to the user question instead of to the entity name, and
-    the passage score reflects that same similarity (not the extraction-time
-    confidence, which is near-constant and useless for cross-book ranking).
+    the passage score reflects that same similarity.
+    chunks_index: optional {(book_id, chapter_number, chunk_index): chunk_dict}.
+    when present, the passage text is the full 512-token chunk instead of the
+    triple's one-sentence source_text.
     """
     if not start_node_names or not book_id:
         return []
@@ -42,37 +54,55 @@ def graph_search(start_node_names: list[str], sm_client: Supermemory, book_id: s
         for name, _ in pending:
             visited.add(name)
 
-        next_frontier: list[tuple[str, list[str]]] = []
+        edges_per_node: list[tuple[str, list[str], list[dict[str, Any]]]] = _fetch_frontier(
+            sm_client, container, pending, relationship_type, top_k, query)
 
-        for start_name, path in pending:
-            edges: list[dict[str, Any]] = _fetch_edges(sm_client, container, start_name, relationship_type, top_k, query)
+        candidate_next: list[tuple[float, str, list[str]]] = []
 
+        for start_name, path, edges in edges_per_node:
             for edge in edges:
                 meta: dict = edge["metadata"]
                 predicate: str = str(meta.get("relationship", ""))
                 target_name: str = str(meta.get("entity_to", ""))
                 source_name: str = str(meta.get("entity_from", ""))
                 new_path: list[str] = path + [predicate, target_name]
+                chap: int = int(float(meta.get("chapter_number", 0) or 0))
+                chunk: int = int(float(meta.get("chunk_index", 0) or 0))
+
+                chunk_hit: dict | None = chunks_index.get((book_id, chap, chunk)) if chunks_index else None
+                text: str = chunk_hit["text"] if chunk_hit else edge["content"]
+                chapter_title: str | None = chunk_hit.get("chapter_title") if chunk_hit else meta.get("chapter_title")
 
                 passages.append(Passage(
                     book_id=book_id, book_title=str(meta.get("book_title", "")),
-                    chapter_number=int(float(meta.get("chapter_number", 0) or 0)),
-                    chapter_title=meta.get("chapter_title"),
-                    chunk_index=int(float(meta.get("chunk_index", 0) or 0)),
-                    text=edge["content"],
-                    score=edge["score"],
+                    chapter_number=chap, chapter_title=chapter_title,
+                    chunk_index=chunk, text=text, score=edge["score"],
                     retrieval_method="graph_traversal", retrieval_agent="graph_rag",
                     graph_path=new_path,
                     source_triple=f"{source_name} -{predicate}-> {target_name}"))
 
                 if target_name and target_name not in visited:
-                    next_frontier.append((target_name, new_path))
+                    candidate_next.append((edge["score"], target_name, new_path))
+
+        # cap fan-out: only the best edges by edge similarity seed the next hop
+        candidate_next.sort(key=lambda t: t[0], reverse=True)
+        seen_targets: set[str] = set()
+        next_frontier: list[tuple[str, list[str]]] = []
+
+        for _, target_name, new_path in candidate_next:
+            if target_name in seen_targets:
+                continue
+            seen_targets.add(target_name)
+            next_frontier.append((target_name, new_path))
+            if len(next_frontier) >= frontier_cap:
+                break
 
         frontier = next_frontier
         if not frontier:
             break
 
     seen: dict[str, Passage] = {}
+
     for p in passages:
         key: str = f"{p.chapter_number}:{p.chunk_index}:{p.source_triple}"
         if key not in seen or p.score > seen[key].score:
@@ -81,13 +111,32 @@ def graph_search(start_node_names: list[str], sm_client: Supermemory, book_id: s
     return sorted(seen.values(), key=lambda p: p.score, reverse=True)[:top_k]
 
 
+def _fetch_frontier(sm_client: Supermemory, container: str,
+                    pending: list[tuple[str, list[str]]],
+                    relationship_type: str | None, top_k: int, query: str | None
+                    ) -> list[tuple[str, list[str], list[dict[str, Any]]]]:
+    """fire one supermemory request per pending entity in parallel.
+    returns (start_name, path, edges) triples in original pending order.
+    """
+    if not pending:
+        return []
+
+    workers: int = min(max_concurrency, len(pending))
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        edge_lists = list(pool.map(
+            lambda item: _fetch_edges(sm_client, container, item[0], relationship_type, top_k, query),
+            pending))
+
+    return [(name, path, edges) for (name, path), edges in zip(pending, edge_lists)]
+
+
 def _fetch_edges(sm_client: Supermemory, container: str, entity_from: str,
                  relationship_type: str | None, top_k: int, query: str | None) -> list[dict[str, Any]]:
     """return all edges whose entity_from matches the given canonical name.
     metadata filter gates which edges are eligible; the q string controls
     intra-set ranking. when a user query is available we pass it so the
-    returned passages are the ones most relevant to the question, not merely
-    the ones closest in text to the entity name.
+    returned passages are the ones most relevant to the question.
     """
     conditions: list[dict] = [
         {"key": "entity_from", "value": entity_from, "filterType": "metadata"}]
@@ -97,9 +146,12 @@ def _fetch_edges(sm_client: Supermemory, container: str, entity_from: str,
 
     filters: dict = {"AND": conditions}
 
-    response = sm_client.search.memories(
-        q=query or entity_from, container_tag=container, filters=filters,
-        search_mode="memories", limit=max(top_k * 3, 20), rerank=False)
+    try:
+        response = sm_client.search.memories(
+            q=query or entity_from, container_tag=container, filters=filters,
+            search_mode="memories", limit=max(top_k * 3, 20), rerank=False)
+    except Exception:
+        return []
 
     edges: list[dict[str, Any]] = []
 

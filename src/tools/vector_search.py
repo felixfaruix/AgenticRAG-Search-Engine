@@ -52,8 +52,13 @@ def dense_search(query: str, qdrant_client: QdrantClient, collection_name: str,
 
 def hybrid_search(query: str, bm25_index: BM25Okapi, chunks: list[dict], qdrant_client: QdrantClient,
                   collection_name: str, embedding_model: TextEmbeddingModel,
-                  book_id: str | None = None, top_k: int = 10) -> list[Passage]:
-    """hybrid search: bm25 + dense, fused via reciprocal rank fusion."""
+                  book_id: str | None = None, top_k: int = 10,
+                  dense_weight: float = 1.0, bm25_weight: float = 0.6) -> list[Passage]:
+    """weighted reciprocal rank fusion of bm25 and dense. dense_weight > bm25_weight
+    keeps dense in charge of semantic precision while bm25 still contributes rank
+    signal for queries rich in named entities. raise bm25_weight if the corpus
+    has very strong quoted-entity recall requirements.
+    """
     bm25_results: list[Passage] = bm25_search(query, bm25_index, chunks, book_id, top_k=top_k * 2)
     dense_results: list[Passage] = dense_search(query, qdrant_client, collection_name, embedding_model, book_id, top_k=top_k * 2)
     rrf_k: int = 60
@@ -62,12 +67,12 @@ def hybrid_search(query: str, bm25_index: BM25Okapi, chunks: list[dict], qdrant_
 
     for rank, p in enumerate(bm25_results):
         key: str = f"{p.book_id}:{p.chapter_number}:{p.chunk_index}"
-        rrf_scores[key] = rrf_scores.get(key, 0.0) + 1.0 / (rrf_k + rank + 1)
+        rrf_scores[key] = rrf_scores.get(key, 0.0) + bm25_weight / (rrf_k + rank + 1)
         rrf_passages[key] = p
 
     for rank, p in enumerate(dense_results):
         key = f"{p.book_id}:{p.chapter_number}:{p.chunk_index}"
-        rrf_scores[key] = rrf_scores.get(key, 0.0) + 1.0 / (rrf_k + rank + 1)
+        rrf_scores[key] = rrf_scores.get(key, 0.0) + dense_weight / (rrf_k + rank + 1)
         if key not in rrf_passages:
             rrf_passages[key] = p
 

@@ -85,8 +85,12 @@ def init_clients() -> tuple[TextEmbeddingModel, QdrantClient, ResilientSupermemo
 
 @st.cache_resource
 def load_bm25_index() -> tuple[BM25Okapi, list[dict]]:
-    """load recursive chunks and build the bm25 index in memory."""
-    with open("data/chunks/recursive_chunks.json") as f:
+    """load contextual chunks and build the bm25 index in memory.
+    bodies are identical to recursive_chunks.json; using the contextual file
+    lets the orchestrator's rerank node see each chunk's contextual_header,
+    matching the context the dense embedder had at ingestion time.
+    """
+    with open("data/chunks/contextual_chunks.json") as f:
         c: list[dict] = json.load(f)
     tokens: list[list[str]] = [chunk["text"].lower().split() for chunk in c]
     return BM25Okapi(tokens), c
